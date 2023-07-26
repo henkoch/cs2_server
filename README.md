@@ -1,2 +1,9 @@
 # csgo_server
-Set-up a private CS:GO server
+
+## Introduction
+
+### Purpose
+
+Hold the scripts for deploying a private CS GO server.
+
+* libvirt/kvm
