@@ -35,7 +35,13 @@ resource "libvirt_volume" "csgo-qcow2" {
   pool = "default" # List storage pools using virsh pool-list
   source = "/var/ubuntu_jammy_cloudimg.qcow2"
   format = "qcow2"
-  #size = "10737418240"
+}
+
+resource "libvirt_volume" "data-qcow2" {
+  name = "csgo-data.qcow2"
+  pool = "default" # List storage pools using virsh pool-list
+  format = "qcow2"
+  size = 45097156608
 }
 
 # Define KVM domain to create
@@ -54,6 +60,10 @@ resource "libvirt_domain" "csgo-vm" {
 
   disk {
     volume_id = "${libvirt_volume.csgo-qcow2.id}"
+  }
+
+  disk {
+    volume_id = "${libvirt_volume.data-qcow2.id}"
   }
 
   console {
