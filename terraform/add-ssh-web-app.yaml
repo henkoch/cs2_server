@@ -38,4 +38,6 @@ mounts:
 
 # 
 runcmd:
+  - cd /home/ansible; git clone -b intro_terraform https://github.com/henkoch/csgo_server
+  - cd csgo_server/ansible_playbook
   - date > DONE.txt

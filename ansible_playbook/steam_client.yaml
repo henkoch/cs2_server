@@ -1,0 +1,71 @@
+---
+- name: playbook to install the SteamCMD cli client
+  hosts: localhost
+  tasks:
+  - name: use apt to update its cache
+    become: yes
+    apt:
+       update_cache: yes
+  - name: install setfacl
+    become: yes
+    apt:
+      update_cache: true
+      package: acl
+  - name: Add multiverse
+    become: yes
+    ansible.builtin.apt_repository:
+      repo: "{{item}}"
+      state: present
+      update_cache: true
+    with_items:
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-backports main restricted universe multiverse'
+    - 'deb http://security.ubuntu.com/ubuntu {{ansible_distribution_release}}-security multiverse'
+  - name: add software-properties-common
+    become: yes
+    apt:
+       package: software-properties-common
+       update_cache: yes
+  - name: Enable i386 architecture
+    become: yes
+    command: /usr/bin/dpkg --add-architecture i386
+  - name: use apt to update its cache
+    become: yes
+    apt:
+       update_cache: yes
+  - name: accept steam license
+    become: yes
+    debconf:
+      name: "steam"
+      question: "steam/question"
+      value: "I AGREE"
+      vtype: "select"
+  - name: install steamcmd
+    become: yes
+    apt:
+      update_cache: true
+      package: ['lib32gcc-s1', 'steamcmd']
+  - name: add steam users
+    become: yes
+    user:
+      name: "steam"
+      comment: "SteamCMD owner"
+      home: "/data/steam"
+  - name: Adding ansible user to group steam
+    become: yes
+    user: 
+      name: ansible
+      groups: steam
+      append: yes
+  - name: install csgo server
+    become: yes
+    become_user: steam
+    ansible_common_remote_group: steam
+    ansible.builtin.command:
+      argv:
+        - /usr/games/steamcmd 
+        - +force_install_dir /data/csgo/
+        - +login anonymous
+        - +app_update 740 validate
+        - +quit
