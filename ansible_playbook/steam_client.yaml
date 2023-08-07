@@ -45,7 +45,12 @@
     become: yes
     apt:
       update_cache: true
-      package: ['lib32gcc-s1', 'steamcmd']
+      package: ['ca-certificates', 'lib32gcc-s1', 'lib32stdc++6', 'libcurl4-gnutls-dev:i386', 'locales', 'steamcmd']
+  - name: install various tools
+    become: yes
+    apt:
+      update_cache: true
+      package: ['curl', 'htop', 'less', 'vim']
   - name: add steam users
     become: yes
     user:
@@ -58,14 +63,28 @@
       name: ansible
       groups: steam
       append: yes
+  - name: Create THE csgo_app directory
+    become: yes
+    become_user: steam
+    ansible.builtin.file:
+      path: /data/steam/csgo_app
+      state: directory
+      mode: '0755'
   - name: install csgo server
     become: yes
     become_user: steam
-    ansible_common_remote_group: steam
     ansible.builtin.command:
       argv:
         - /usr/games/steamcmd 
-        - +force_install_dir /data/csgo/
+        - +force_install_dir /data/steam/csgo_app
         - +login anonymous
         - +app_update 740 validate
         - +quit
+  - name: install csgo server
+    become: yes
+    become_user: steam
+    git:
+      repo: 'git@github.com:henkoch/csgo_server.git'
+      dest: /data/steam/csgo_git_repo
+      update: yes
+
