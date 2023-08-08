@@ -5,11 +5,14 @@ FROM ubuntu as build_stage
 
 # docker build --tag steam_ubuntu:0.1.0 .
 # docker run -it steam_ubuntu:0.1.0 bash
-# docker run -it  --volume /home/hck/Downloads/csgo_app:/data/steam/csgo_app --volume /home/hck/Dropbox/Sources/Servers/csgo_server/csgo_scripts:/data/steam/csgo_scripts steam_ubuntu:0.1.0 bash
+# docker run -it  --volume /home/hck/Downloads/csgo_app:/data/steam/csgo_app --volume /home/hck/Dropbox/Sources/Servers/csgo_server/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts steam_ubuntu:0.1.0 bash
+#   --network host
 # cd ~/
 # mkdir ~/csgo_app
 # export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
-# time ~/steamcmd/steamcmd.sh +force_install_dir ~/csgo_app/ +login anonymous +app_update 740 validate +quit
+# time steamcmd +force_install_dir ~/csgo_app/ +login anonymous +app_update 740 validate +quit
+# ~/csgo_git_repo/csgo_scripts/run_server.sh
+#
 # export LD_LIBRARY_PATH=/data/steam/csgo_app/bin
 # /data/steam/csgo_app/srcds_linux -game csgo -usercon -net_port_try 1 -tickrate 128 -nobots +game_type 0 +game_mode 1 +mapgroup mg_active +map de_mirage
 
@@ -37,10 +40,12 @@ RUN dpkg --add-architecture i386 \
  && apt-get install -y --no-install-recommends --no-install-suggests \
       ca-certificates\
       curl\
-      locales\
-      libcurl4-gnutls-dev:i386\
+      htop\
+      less\
       lib32gcc-s1\
       lib32stdc++6\
+      libcurl4-gnutls-dev:i386\
+      locales\
       steamcmd\
       vim
 
@@ -49,6 +54,9 @@ RUN  sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
 
 RUN mkdir ${HOMEDIR}/.steam
 RUN chown ${USER}:${USER} ${HOMEDIR}/.steam
+
+RUN mkdir ${HOMEDIR}/csgo_git_repo
+RUN chown ${USER}:${USER} ${HOMEDIR}/csgo_git_repo
 
 
 # Clean up

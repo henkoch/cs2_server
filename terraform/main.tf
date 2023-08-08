@@ -25,7 +25,7 @@ data "template_file" "user_data" {
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {
-  name      = "commoninit.iso"
+  name      = "csgo_commoninit.iso"
   user_data = data.template_file.user_data.rendered
 }
 

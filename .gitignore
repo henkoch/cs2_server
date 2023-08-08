@@ -1,0 +1,8 @@
+Dockerfile.bookworm
+Dockerfile.focal
+Dockerfile.jammy
+Dockerfile.ubuntu
+terraform.tfstate
+terraform.tfstate.backup
+tf-cloud-init*
+TODO

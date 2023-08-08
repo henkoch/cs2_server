@@ -31,9 +31,12 @@ Supported environments:
 ### Install csgo server
 
 * [Counter-Strike: Global Offensive - Dedicated Servers](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Dedicated_Servers)
+* [CFG files](https://developer.valvesoftware.com/wiki/CFG)
+* [Game Modes](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Game_Modes)
+* [Map list](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Maps)
+* [Counter-Strike: Global Offensive Maps](https://liquipedia.net/counterstrike/Portal:Maps)
 * [Running a Counter Strike Global Offensive Server on Ubuntu 18.04](https://www.linode.com/docs/guides/launch-a-counter-strike-global-offensive-server-on-ubuntu-18-04/)
 * [Installing a CS:GO Dedicated Server in Ubuntu](https://medium.com/@oritromax/installing-a-cs-go-dedicated-server-in-ubuntu-ed37377b06d1)
-* [Counter-Strike: Global Offensive - Dedicated Servers](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Dedicated_Servers)
 
 * su - steam
 * bash
@@ -420,4 +423,18 @@ Failed to open libtier0.so (/home/steam/steamcmd/linux32/libstdc++.so.6: version
 ```text
 dlopen failed trying to load:
 /data/steam/.steam/sdk32/steamclient.so
+```
+### CSGO server troubleshooting
+
+```text
+#GameTypes: missing mapgroupsSP entry for game type/mode (custom/custom).
+#GameTypes: missing mapgroupsSP entry for game type/mode (cooperative/cooperative).
+#GameTypes: missing mapgroupsSP entry for game type/mode (cooperative/coopmission).
+#GameTypes: missing gameModes entry for game type mapgroups.
+#GameTypes: empty gameModes entry for game type mapgroups.
+Failed to load gamerulescvars.txt, game rules cvars might not be reported to management tools.
+Maxplayers is deprecated, set it in gamemodes_server.txt.example or use -maxplayers_override instead.
+ConVarRef room_type doesn't point to an existing ConVar
+bot_coopmission_dz_engagement_limit - missing cvar specified in bspconvar_whitelist.txt
+sv_camera_fly_enabled - missing cvar specified in bspconvar_whitelist.txt
 ```

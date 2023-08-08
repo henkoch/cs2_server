@@ -9,4 +9,5 @@ clean:
 	- terraform destroy -auto-approve
 	- virsh destroy csgo_vm
 	- virsh undefine csgo_vm
-	- sudo rm /var/lib/libvirt/images/commoninit.iso
+	- virsh vol-delete csgo_commoninit.iso
+	- sleep 5 && sudo rm /var/lib/libvirt/images/commoninit.iso
