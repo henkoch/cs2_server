@@ -3,9 +3,9 @@
 ############################################################
 FROM ubuntu as build_stage
 
-# docker build --tag steam_ubuntu:0.1.0 .
-# docker run -it steam_ubuntu:0.1.0 bash
-# docker run -it  --volume /home/hck/Downloads/csgo_app:/data/steam/csgo_app --volume /home/hck/Dropbox/Sources/Servers/csgo_server/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts steam_ubuntu:0.1.0 bash
+# docker build --tag steam_ubuntu:0.1.1 .
+# docker run -it steam_ubuntu:0.1.1 bash
+# docker run -it  --volume /home/hck/Downloads/csgo_app:/data/steam/csgo_app --volume `pwd`/../csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts steam_ubuntu:0.1.1 bash
 #   --network host
 # cd ~/
 # mkdir ~/csgo_app

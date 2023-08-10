@@ -38,8 +38,7 @@ fi
 # logs files: ~/csgo_app/csgo/logs
 
 # gamemode_casual_server.cfg
-cp ${CSGO_SCRIPTS_DIR}/autoexec.cfg ${CSGO_BASE_DIR}/csgo/cfg/
-cp ${CSGO_SCRIPTS_DIR}/server.cfg ${CSGO_BASE_DIR}/csgo/cfg/
+cp ${CSGO_SCRIPTS_DIR}/*.cfg ${CSGO_BASE_DIR}/csgo/cfg/
 cp ${CSGO_SCRIPTS_DIR}/gamemodes_server.txt ${CSGO_BASE_DIR}/csgo/
 
 # https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Game_Modes

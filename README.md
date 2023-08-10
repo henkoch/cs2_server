@@ -19,11 +19,11 @@ Supported environments:
 
 ### References
 
-* [SteamCMD Error Codes](https://github.com/GameServerManagers/LinuxGSM-Docs/blob/master/steamcmd/errors.md)
 * [Dedicated Servers List](https://developer.valvesoftware.com/wiki/Dedicated_Servers_List)
 * [How to Make a Counter-Strike: Global Offensive Server on Linux](https://www.hostinger.com/tutorials/how-to-make-a-csgo-server)
-* [Source Dedicated Server](https://developer.valvesoftware.com/wiki/Source_Dedicated_Server)
 * [forum - Source Dedicated Server (Linux)](https://steamcommunity.com/discussions/forum/14/)
+* [SteamCMD Error Codes](https://github.com/GameServerManagers/LinuxGSM-Docs/blob/master/steamcmd/errors.md)
+* [Source Dedicated Server](https://developer.valvesoftware.com/wiki/Source_Dedicated_Server)
 * [Forum - Counter-Strike: Global Offensive](https://steamcommunity.com/app/730/discussions/)
 * [debian csgo docker image](https://hub.docker.com/r/cm2network/csgo/)
 * [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD)
@@ -34,6 +34,7 @@ Supported environments:
 * [CFG files](https://developer.valvesoftware.com/wiki/CFG)
 * [Game Modes](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Game_Modes)
 * [Map list](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Maps)
+* [Access rcon on server](https://mcprohosting.com/billing/knowledgebase/325/How-to-Use-RCON-on-a-Counter-Strike-GO-Server.html)
 * [Counter-Strike: Global Offensive Maps](https://liquipedia.net/counterstrike/Portal:Maps)
 * [Running a Counter Strike Global Offensive Server on Ubuntu 18.04](https://www.linode.com/docs/guides/launch-a-counter-strike-global-offensive-server-on-ubuntu-18-04/)
 * [Installing a CS:GO Dedicated Server in Ubuntu](https://medium.com/@oritromax/installing-a-cs-go-dedicated-server-in-ubuntu-ed37377b06d1)
@@ -158,6 +159,44 @@ steam      11357    8641  0 09:37 pts/0    00:00:00 ps -ef
 
 ./lgsm/modules/fix_csgo.sh
 
+## CSGO configuration
+
+### Files of interest
+
+* autoexec.cfg - [This file is executed before the first map starts.](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Dedicated_Servers#autoexec.cfg)
+* server.cfg - [This file is executed every map change, and before the gamemode files.](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Dedicated_Servers#server.cfg)
+* gamemodes_server.txt - [This file allows the server administrator to customize each game mode for their own server. It overrides and defaults set by Valve in gamemodes.txt.](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Dedicated_Servers#gamemodes_server.txt)
+* gamemode_casual_server.cfg - [used for overriding the configurations that valve have put into gamemode_casual.cfg](https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Dedicated_Servers#gamemode_casual_server.cfg)
+
+### Maps
+
+* Map name prefix seems to indicate the type of game it becomes
+  * cs_ - Hostage/Rescue (original counter-strike mode)
+  * de_ - demolition? or is it deathmatch?
+  * ar_ - arms race?
+  * dz_ - dangerzone
+
+* TODO can I use this command to switch mode? `map <mapname> survival`
+  * changelevel dz_blacksite survival
+
+### Parameters of interest
+
+* mp_maxrounds
+* mp_friendlyfire
+* mp_roundtime
+* mp_timelimit
+* mp_allowNPCs
+* mp_teams_unbalance_limit
+* mp_respawnwavetime
+* mp_roundtime_hostage
+* mp_freezetime
+* mp_disable_respawn_times
+* mp_disable_respawn_times
+* mp_friendlyfire
+* mp_limitteams
+mp_teamplay
+mp_autoteambalance
+
 ## Troubleshooting
 
 ### installation troubleshooting
@@ -167,7 +206,7 @@ steam      11357    8641  0 09:37 pts/0    00:00:00 ps -ef
 * ssh -i tf-cloud-init ansible@192.168.122.122
 * systemctl status cloud-final
 * sudo journalctl -u cloud-final
-* sudo /var/log/cloud-init-output.log
+* sudo cat /var/log/cloud-init-output.log
 * /var/log/cloud-init.log
 * /var/lib/cloud/data/result.json
 
@@ -424,6 +463,7 @@ Failed to open libtier0.so (/home/steam/steamcmd/linux32/libstdc++.so.6: version
 dlopen failed trying to load:
 /data/steam/.steam/sdk32/steamclient.so
 ```
+
 ### CSGO server troubleshooting
 
 ```text
@@ -437,4 +477,9 @@ Maxplayers is deprecated, set it in gamemodes_server.txt.example or use -maxplay
 ConVarRef room_type doesn't point to an existing ConVar
 bot_coopmission_dz_engagement_limit - missing cvar specified in bspconvar_whitelist.txt
 sv_camera_fly_enabled - missing cvar specified in bspconvar_whitelist.txt
+SDR_LISTEN_PORT is set, but not SDR_CERT/SDR_PRIVATE_KEY.
 ```
+
+#### in rescue mode, I didn't get to choose sides
+
+#### How do I set the number rounds in rescue mode?

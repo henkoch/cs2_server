@@ -16,7 +16,7 @@ users:
     groups: users, admin
     lock_passwd: false
     ssh_authorized_keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC49hRsvrEIc0Gm62v+K2G1ulU0JtejMK6/0nmMCaZijcW0VF4Lybj7nId4Q7qZVR2VVjfljbgaOP9RBNHrhKfB5HN5U/fDCyNsqhT/mHIHuXGKc8zC4Ox552L/vViziHsxpTE+s8ewx6NRK9reiPDz9CxDIwsR6LIX6lIelWCn1z9m2kuX5F0hBH36GQTLrhFxpN9oKC9wVBJ1PPagzHECz6HczLlEE7yLVDRB1pWZ0obmb/LVf02VP58Pd+zSBN4VB07QTwvdjA7iGng/PTNy1On0Wd2D46gu8V6VesChafk+uhF/F4fybyf2coI5MCyREgP96+fVtnaA1GKBZgfb4n/CuME0ai8IQ+M8hCzR1JBJXeCZpFp0IoeYynSx4/XfXb0DbtraSIKyISilQyDsTZmrlzy0Q6Sd3OxAWqojk2StjkAQ+GcGGhRKHtQswaXTK4wtyNaS9YtuhJmvudDKm6n28CuBFbYBgqJfaLbGMLq0Bx57jwf7QvroX5fXRXk=
+      - ${ansible_ssh_public_key}
 
 # install packages
 packages:
@@ -39,5 +39,5 @@ mounts:
 # 
 runcmd:
   - cd /home/ansible; git clone -b intro_terraform https://github.com/henkoch/csgo_server
-  - cd csgo_server/ansible_playbook && ansible-playbook -v steam_client.yaml
+  - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "csgo_client_access_password={{csgo_client_access_password}}" --extra-vars "csgo_server_rcon_password={{csgo_server_rcon_password}}" --extra-vars "one_for_local_zero_for_global={{one_for_local_zero_for_global}}" --extra-vars "server_name='{{server_name}}'" --extra-vars "steam_server_token={{steam_server_token}}" -v steam_client.yaml
   - date > DONE.txt

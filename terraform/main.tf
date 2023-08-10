@@ -22,6 +22,10 @@ provider "libvirt" {
 # https://github.com/dmacvicar/terraform-provider-libvirt/blob/main/examples/v0.12/ubuntu/ubuntu-example.tf
 data "template_file" "user_data" {
   template = file("./add-ssh-web-app.yaml")
+
+  vars = {
+    ansible_ssh_public_key = file(var.ansible_ssh_public_key_filename)
+  }
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {

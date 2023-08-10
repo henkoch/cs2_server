@@ -44,7 +44,8 @@
 
 		"mapgroupsMP"						// List of mapgroups valid for this game mode ( casual )
 		{
-			"mg_bomb_se"		""
+			"mg_rescue"		""
+			"mg_bomb"		""
 		}
 
 
@@ -146,15 +147,23 @@
 
 	"mapgroups"
 	{
-		"mg_bomb_se"									// mapgroup definition
+		"mg_bomb"									// mapgroup definition
 		{
-			"name"			"mg_bomb_se"
+			"name"			"mg_bomb"
 			"maps"
 			{
 				"de_nuke"		""
 				"de_dust2"		""
-				"de_inferno"		""
+				"de_inferno"	""
 				"de_mirage"		""
+			}
+		}
+		"mg_rescue"									// mapgroup definition
+		{
+			"name"			"mg_rescue"
+			"maps"
+			{
+				"cs_office"		""
 			}
 		}
 	}

@@ -57,6 +57,7 @@
       name: "steam"
       comment: "SteamCMD owner"
       home: "/data/steam"
+      shell: "/usr/bin/bash"
   - name: Adding ansible user to group steam
     become: yes
     user: 
@@ -88,4 +89,7 @@
       dest: /data/steam/csgo_git_repo
       update: yes
       version: intro_terraform
-
+  - name: Generate autoexec.cfg from Template
+    template:
+      src: files/autoexec.cfg.j2
+      dest: /data/steam/csgo_app/csgo/cfg
