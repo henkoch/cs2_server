@@ -90,6 +90,8 @@
       update: yes
       version: intro_terraform
   - name: Generate autoexec.cfg from Template
+    become: yes
+    become_user: steam
     template:
       src: files/autoexec.cfg.j2
       dest: /data/steam/csgo_app/csgo/cfg

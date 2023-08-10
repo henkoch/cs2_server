@@ -21,7 +21,7 @@ variable "one_for_local_zero_for_global" {
 
 variable "server_name" {
   description = "The name of the server displayed in the server browser"
-  default = "You Really Need To Change This"
+  default = "You-Really-Need-To-Change-This"
 }
 
 variable "steam_server_token" {
