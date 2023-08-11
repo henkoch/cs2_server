@@ -84,4 +84,4 @@
     become_user: steam
     template:
       src: files/autoexec.cfg.j2
-      dest: /data/steam/csgo_app/csgo/cfg
+      dest: /data/steam/autoexec.cfg
