@@ -74,6 +74,16 @@
   - name: install csgo server
     become: yes
     become_user: steam
+    ansible.builtin.command:
+      argv:
+        - /usr/games/steamcmd 
+        - +force_install_dir /data/steam/csgo_app
+        - +login anonymous
+        - +app_update 740 validate
+        - +quit
+  - name: install csgo server
+    become: yes
+    become_user: steam
     git:
       repo: 'https://github.com/henkoch/csgo_server.git'
       dest: /data/steam/csgo_git_repo
@@ -84,4 +94,4 @@
     become_user: steam
     template:
       src: files/autoexec.cfg.j2
-      dest: /data/steam/autoexec.cfg
+      dest: /data/steam/csgo_app/csgo/cfg/autoexec.cfg
