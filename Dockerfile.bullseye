@@ -7,7 +7,7 @@ FROM debian:bullseye-slim as build_stage
 
 # docker build --tag steam_bullseye:0.1.1 --file Dockerfile.bullseye .
 # docker run -it steam_bullseye:0.1.1 bash
-# docker run -it  --volume /home/hck/Downloads/csgo_app:/home/steam/csgo_app steam_bullseye:0.1.1 bash
+# docker run -it  --volume ${HOME}/Downloads/csgo_app:/home/steam/csgo_app steam_bullseye:0.1.1 bash
 # cd ~/
 # mkdir ~/csgo_app
 # export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32

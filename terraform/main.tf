@@ -24,6 +24,7 @@ provider "libvirt" {
 data "template_file" "user_data" {
   template = file("./cloud-init-actions.yaml")
 
+  # left hand var names are the var names used in the cloud-init yaml.
   vars = {
     ansible_ssh_public_key = file(var.ansible_ssh_public_key_filename)
     csgo_client_access_password = var.csgo_client_access_password

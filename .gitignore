@@ -2,6 +2,7 @@ Dockerfile.bookworm
 Dockerfile.focal
 Dockerfile.jammy
 Dockerfile.ubuntu
+private_*
 terraform.tfstate
 terraform.tfstate.backup
 tf-cloud-init*

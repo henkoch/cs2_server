@@ -1,5 +1,5 @@
 ---
-- name: playbook to install the SteamCMD cli client
+- name: playbook to install the SteamCMD cli client and CSGO server
   hosts: localhost
   tasks:
   - name: use apt to update its cache
@@ -75,13 +75,14 @@
     become: yes
     become_user: steam
     ansible.builtin.command:
+      creates: /data/steam/csgo_app/srcds_linux
       argv:
         - /usr/games/steamcmd 
         - +force_install_dir /data/steam/csgo_app
         - +login anonymous
         - +app_update 740 validate
         - +quit
-  - name: install csgo server
+  - name: install git repo with the scripts for the csgo server
     become: yes
     become_user: steam
     git:

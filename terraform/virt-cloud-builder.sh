@@ -41,7 +41,7 @@ cp "${IMG_FA:?}" "${VB_FA:?}"
 
 #    --ssh-inject "root:file:$HOME/.ssh/id_rsa.pub" \
 #    --copy-in build/01-netcfg.yaml:/etc/netplan \
-#    --root-password "file:/home/hck/.ssh/base_image.password" \
+#    --root-password "file:${HOME}/.ssh/base_image.password" \
 
 # generates <name>-vb.qcow2
 virt-customize \
