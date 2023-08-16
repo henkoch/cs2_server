@@ -36,6 +36,6 @@ mounts:
 
 # 
 runcmd:
-  - cd /home/ansible; git clone -b intro_terraform https://github.com/henkoch/csgo_server
+  - cd /home/ansible; git clone -b add_azure https://github.com/henkoch/csgo_server
   - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "csgo_client_access_password=${csgo_client_access_password}" --extra-vars "csgo_server_rcon_password=${csgo_server_rcon_password}" --extra-vars "one_for_local_zero_for_global=${one_for_local_zero_for_global}" --extra-vars "server_name=${server_name}" --extra-vars "steam_server_token=${steam_server_token}" -v steam_client.yaml
   - date > DONE.txt
