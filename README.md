@@ -34,7 +34,7 @@ Supported environments:
 
 #### Deploy to a local libvirt VM
 
-* git clone https://github.com/henkoch/csgo_server.git
+* `git clone https://github.com/henkoch/csgo_server.git`
 * cd csgo_server/terraform
 * make base
   * This will download an ubuntu cloud image and expand it to 10GB.

@@ -40,6 +40,23 @@ provider "azurerm" {
   client_secret     = var.client_secret
 }
 
+data "template_file" "user_data" {
+  template = file("./cloud-init-actions.yaml")
+}
+
+data "template_cloudinit_config" "commoninit" {
+  gzip          = true
+  base64_encode = true
+
+  # Main cloud-config configuration file.
+  part {
+    content_type = "text/cloud-config"
+    content = data.template_file.user_data.rendered
+  }
+}
+
+# TODO azurerm_managed_disk
+
 # Create a virtual network within the resource group
 resource "azurerm_virtual_network" "csgo_vnet" {
   name                = "csgo-vnet"
@@ -114,6 +131,9 @@ resource "azurerm_linux_virtual_machine" "csgo_vm" {
   # az vm list-sizes --location "northeurope"
   # az vm list-skus --location northeurope --size Standard_B --all --output table
   size                  = "Standard_B1s"
+
+  # Provide the the cloud-init data.
+  custom_data = data.template_cloudinit_config.commoninit.rendered
 
   os_disk {
     name                 = "myOsDisk"

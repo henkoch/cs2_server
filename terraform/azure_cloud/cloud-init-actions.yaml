@@ -1,0 +1,20 @@
+# cloud-init actions
+
+# Add users to the system. Users are added after groups are added.
+users:
+  - default
+  - name: ansible
+    gecos: ansible
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    lock_passwd: false
+
+# install packages
+packages:
+  - ansible
+  - git
+
+# 
+runcmd:
+  - cd /home/ansible; git clone -b add_azure https://github.com/henkoch/csgo_server
