@@ -15,6 +15,23 @@ packages:
   - ansible
   - git
 
+disk_setup:
+  /dev/sdc:
+    table_type: 'gpt'
+    layout: True
+    overwrite: false
+fs_setup:
+  - label: data
+    device: /dev/sdc1
+    filesystem: ext4
+    overwrite: false
+mounts:
+  - [/dev/sdc1, /data, ext4, 'defaults,discard,nofail', '0', '2']
+
 # 
 runcmd:
   - cd /home/ansible; git clone -b add_azure https://github.com/henkoch/csgo_server
+  - sudo dmesg > dmesg.txt
+  - sudo mount /data
+  - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "csgo_client_access_password=${csgo_client_access_password}" --extra-vars "csgo_server_rcon_password=${csgo_server_rcon_password}" --extra-vars "one_for_local_zero_for_global=${one_for_local_zero_for_global}" --extra-vars "server_name=${server_name}" --extra-vars "steam_server_token=${steam_server_token}" -v steam_client.yaml
+  - echo "0.3.0" > done.txt

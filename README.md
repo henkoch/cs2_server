@@ -32,6 +32,13 @@ Supported environments:
 
 ### Usage
 
+#### Manually start the csgo server
+
+* login to the VM
+* sudo -i
+* sudo -i steam
+* ~/csgo_git_repo/csgo_scripts/run_server.sh
+
 #### Deploy to a local libvirt VM
 
 * `git clone https://github.com/henkoch/csgo_server.git`
