@@ -46,6 +46,13 @@ Steps:
 * rcon_password <var.csgo_server_rcon_password>
 * rcon_status
 
+#### Manually start the csgo server
+
+* login to the VM
+* sudo -i
+* su - steam
+* ~/csgo_git_repo/csgo_scripts/run_server.sh
+
 #### Example of deployment script
 
 call it 'private_deploy_azure.sh'
@@ -115,13 +122,6 @@ variable admin_public_ssh_key {
   default = "ssh-rsa xxx"
 }
 ```
-
-#### Manually start the csgo server
-
-* login to the VM
-* sudo -i
-* su - steam
-* ~/csgo_git_repo/csgo_scripts/run_server.sh
 
 #### Deploy to a local libvirt VM
 
