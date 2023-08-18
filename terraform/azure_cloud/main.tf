@@ -6,10 +6,8 @@
 # First create a csgo resource group, via the web interface
 # For the rolle look at the 'Access control(IAM)' entry under the resource group web page.
 #  Contributor -  Grants full access to manage all resources, but does not allow you to assign roles in Azure RBAC, manage assignments in Azure Blueprints, or share image galleries.
-#   TODO can the contributor affect things in other resource groups?
-# mkdir ~/.variouos_credentials && 
 # subscriptionID=$(az account show --query id -o tsv)
-# resourceGroup=var.resource_group_name && chmod 700 ~/.variouos_credentials
+# mkdir ~/.variouos_credentials && chmod 700 ~/.variouos_credentials
 # az ad sp create-for-rbac --name terraform_op --role Contributor --scopes /subscriptions/$subscriptionID/resourceGroups/$resourceGroup > ~/.variouos_credentials/azure.$resourceGroup.terraform_op
 
 # add the following to your private apply script, do not check this in
@@ -17,8 +15,6 @@
 # export ARM_TENANT_ID="<azure_subscription_tenant_id>"
 # export ARM_CLIENT_ID="<service_principal_appid>"
 # export ARM_CLIENT_SECRET="<service_principal_password>"
-
-# CSGO set-up: https://edi.wang/post/2022/6/16/how-to-setup-csgo-dedicated-server-on-microsoft-azure
 
 terraform {
   required_providers {
@@ -28,7 +24,6 @@ terraform {
     }
   }
 }
-
 
 provider "azurerm" {
   skip_provider_registration = true # This is only required when the User, Service Principal, or Identity running Terraform lacks the permissions to register Azure Resource Providers.
@@ -64,8 +59,6 @@ data "template_cloudinit_config" "commoninit" {
     content      = data.template_file.user_data.rendered
   }
 }
-
-# TODO azurerm_managed_disk
 
 # Create a virtual network within the resource group
 resource "azurerm_virtual_network" "csgo_vnet" {
@@ -206,6 +199,6 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk_on_csgo_vm" {
 
 # Output Server IP
 output "ip" {
-  # TODO this showed an old IP address instead of the new ip address when re-running tf apply
+  # NOTE: this showed an old IP address instead of the new ip address when re-running tf apply
   value = azurerm_public_ip.csgo_public_ip.*.ip_address
 }
