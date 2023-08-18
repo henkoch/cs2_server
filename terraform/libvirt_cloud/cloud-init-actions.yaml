@@ -1,0 +1,41 @@
+#cloud-config
+# Add groups to the system
+groups:
+  - hashicorp
+
+# Add users to the system. Users are added after groups are added.
+users:
+  - default
+  - name: ansible
+    gecos: ansible
+    shell: /bin/bash
+    primary_group: hashicorp
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    lock_passwd: false
+    ssh_authorized_keys:
+      - ${ansible_ssh_public_key}
+
+# install packages
+packages:
+  - ansible
+  - git
+
+disk_setup:
+  /dev/vdb:
+    table_type: 'gpt'
+    layout: True
+    overwrite: false
+fs_setup:
+  - label: data
+    device: /dev/vdb1
+    filesystem: ext4
+    overwrite: false
+mounts:
+  - [/dev/vdb1, /data, ext4, 'defaults,discard,nofail', '0', '2']
+
+# 
+runcmd:
+  - cd /home/ansible; git clone -b main https://github.com/henkoch/csgo_server
+  - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "csgo_client_access_password=${csgo_client_access_password}" --extra-vars "csgo_server_rcon_password=${csgo_server_rcon_password}" --extra-vars "one_for_local_zero_for_global=${one_for_local_zero_for_global}" --extra-vars "server_name=${server_name}" --extra-vars "steam_server_token=${steam_server_token}" -v steam_client.yaml
+  - date > DONE.txt

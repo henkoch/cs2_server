@@ -32,9 +32,100 @@ Supported environments:
 
 ### Usage
 
+#### using rcon
+
+* [How to Use RCON on a Counter-Strike: GO Server](https://mcprohosting.com/billing/knowledgebase/325/How-to-Use-RCON-on-a-Counter-Strike-GO-Server.html)
+* [CS:GO Console Commands](https://www.tobyscs.com/csgo-console-commands/)
+
+Steps:
+
+* enable 'in-game developer console'
+  * How to Use RCON on a Counter-Strike: GO Server
+  * n the Game Settings, locate the Enable Developer Console setting and set this to Yes.
+* press ~
+* rcon_password <var.csgo_server_rcon_password>
+* rcon_status
+
+#### Manually start the csgo server
+
+* login to the VM
+* sudo -i
+* su - steam
+* ~/csgo_git_repo/csgo_scripts/run_server.sh
+
+#### Example of deployment script
+
+call it 'private_deploy_azure.sh'
+
+the .gitignore has been set-up to ignore files starting with 'private_'.
+
+```bash
+#!/usr/bin/bash
+
+terraform apply \
+          -var csgo_client_access_password="AccessPassword"\
+          -var csgo_server_rcon_password="RemoteConsolePassword"\
+          -var csgo_one_for_local_zero_for_global="0"\
+          -var csgo_server_name="MyServerName"\
+          -var csgo_steam_server_token="The_GLST_TokenIHaveFromSteam"
+```
+
+To get the GLST see: [Steam Game Server Account Management](https://steamcommunity.com/dev/managegameservers)
+
+#### Example of the azure private variables
+
+* azure_subscription_id - `az account show --query id -o tsv`
+
+the following info is generated from `az ad sp create-for-rbac --name terraform_op --role Contributor --scopes /subscriptions/$subscriptionID/resourceGroups/$resourceGroup`
+
+* azure_csgo_tenant_id - tenant
+* client_id - appId
+* client_secret - password
+
+Store this file as 'private_variables.tf' in the azure_cloud directory, with the other .tf files.
+
+```json
+variable azure_subscription_id {
+  type        = string
+  description = ""
+  default = "xxxx"
+}
+
+variable azure_csgo_tenant_id {
+  type        = string
+  description = "azure tenant id for the csgo group"
+  default = "xxxx"
+}
+variable client_id {
+  type        = string
+  description = ""
+  default = "xxx"
+}
+variable client_secret {
+  type        = string
+  description = ""
+  default = "xxxx"
+}
+
+
+variable my_public_ip {
+  type        = string
+  description = "the public ip address of my local machine"
+  default = "MY_PUBLIC_IP_FROM_MY_ISP"
+}
+
+# ssh-keygen -t rsa -b 2048  -q -f private_admin_id_rsa
+# cat private_admin_id_rsa.pub
+variable admin_public_ssh_key {
+  type        = string
+  description = "the public ssh key for the admin account"
+  default = "ssh-rsa xxx"
+}
+```
+
 #### Deploy to a local libvirt VM
 
-* git clone https://github.com/henkoch/csgo_server.git
+* `git clone https://github.com/henkoch/csgo_server.git`
 * cd csgo_server/terraform
 * make base
   * This will download an ubuntu cloud image and expand it to 10GB.

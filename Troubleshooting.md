@@ -393,6 +393,31 @@ SDR_LISTEN_PORT is set, but not SDR_CERT/SDR_PRIVATE_KEY.
 
 #### How do I set the number rounds in rescue mode?
 
+#### Public server not visible
+
+add to autoexec.cfg: `sv_tags "my_unique_tag"`
+
+you can then search for the tag and find your server that way.
+
+* [CS:GO Not showing up in server/community list](https://forums.alliedmods.net/showthread.php?t=237814)
+* [How to Setup CS:GO Dedicated Server on Microsoft Azure](https://edi.wang/post/2022/6/16/how-to-setup-csgo-dedicated-server-on-microsoft-azure)
+
+```text
+Calling BreakpadMiniDumpSystemInit
+Setting breakpad minidump AppID = 740
+Logging into Steam gameserver account with logon token '23FE72D3xxxxxxxxxxxxxxxxxxxxxxxx'
+Initialized low level socket/threading support.
+SDR_LISTEN_PORT is set, but not SDR_CERT/SDR_PRIVATE_KEY.
+Set SteamNetworkingSockets P2P_STUN_ServerList to '' as per SteamNetworkingSocketsSerialized
+SteamDatagramServer_Init succeeded
+Connection to Steam servers successful.
+   Public IP is 40.113.83.58.
+Assigned persistent gameserver Steam ID [G:1:9490790].
+Gameserver logged on to Steam, assigned identity steamid:85568392929530214
+Set SteamNetworkingSockets P2P_STUN_ServerList to '162.254.196.83:3478' as per SteamNetworkingSocketsSerialized
+VAC secure mode is activated.
+GC Connection established for server version 1569, instance idx 1
+```
 
 ####
 
