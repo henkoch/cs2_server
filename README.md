@@ -88,7 +88,7 @@ Store this file as 'private_variables.tf' in the azure_cloud directory, with the
 variable azure_subscription_id {
   type        = string
   description = ""
-  default = "e0208311-8a52-410a-8c94-898d9a8c4c83"
+  default = "xxxx"
 }
 
 variable azure_csgo_tenant_id {
