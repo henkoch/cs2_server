@@ -3,10 +3,14 @@
 ############################################################
 FROM ubuntu as build_stage
 
-# docker build --tag steam_ubuntu:0.1.1 .
-# docker run -it steam_ubuntu:0.1.1 bash
-# docker run -it  --volume ${HOME}/Downloads/csgo_app:/data/steam/csgo_app --volume `pwd`/../csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts steam_ubuntu:0.1.1 bash
+# docker build --tag steam_ubuntu:0.1.4 .
+# docker run -it steam_ubuntu:0.1.4 bash
+# docker run -it  --volume ${HOME}/Downloads/csgo_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts steam_ubuntu:0.1.4 bash
 #   --network host
+# docker run -it  --network host --volume ${HOME}/Downloads/csgo_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts steam_ubuntu:0.1.4 bash
+# su - steam
+# ~/csgo_git_repo/csgo_scripts/run_server.sh
+
 # cd ~/
 # mkdir ~/csgo_app
 # export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
@@ -58,6 +62,8 @@ RUN chown ${USER}:${USER} ${HOMEDIR}/.steam
 RUN mkdir ${HOMEDIR}/csgo_git_repo
 RUN chown ${USER}:${USER} ${HOMEDIR}/csgo_git_repo
 
+ADD csgo_scripts/run_server.sh ${HOMEDIR}/
+RUN chown ${USER}:${USER} ${HOMEDIR}/run_server.sh
 
 # Clean up
 RUN apt-get remove --purge --auto-remove -y \
@@ -68,4 +74,4 @@ WORKDIR ${STEAMCMDDIR}
 
 #FROM bullseye-root AS bullseye
 ## Switch to user
-#USER ${USER}
+USER ${USER}

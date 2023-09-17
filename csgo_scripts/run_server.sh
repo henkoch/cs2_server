@@ -45,7 +45,7 @@ cp ${CSGO_SCRIPTS_DIR}/gamemodes_server.txt ${CSGO_BASE_DIR}/csgo/
 #
 CASUAL="-maxplayers 20 -nobots +game_type 0 +game_mode 0 +mapgroup mg_active +map de_nuke"
 # https://counterstrike.fandom.com/wiki/Hostage_Rescue
-HOSTAGE_RESCUE="-maxplayers 20 -nobots +game_type 0 +game_mode 0 +map cs_office"
+HOSTAGE_RESCUE="-maxplayers 20 -nobots +game_type 0 +game_mode 0 +sv_game_mode_flags 0 +sv_skirmish_id 0  +mapgroup "casual"  +map cs_office"
 # The above became arms-race, maybe due to the npbots?
 # HOSTAGE_RESCUE="-maxplayers 20 +game_type 4 +game_mode 0 +map cs_office"
 #  +mapgroup mg_hostage
@@ -58,6 +58,13 @@ DANGER_ZONE="-maxplayers 12 -nobots  +game_type 6 +game_mode 0 +map dz_blacksite
 # don't forget edit "maplist" and "mapcycle" => "dz_blacksite \n dz_sirocco"
 # TODO why did it start looking for cs_italy????e
 # game_type 6; game_mode 0; changelevel dz_blacksite; sv_dz_team_count 2; sv_dz_jointeam_allowed 1; sv_dz_autojointeam 0; sv_dz_player_spawn_armor 1
+
+
+# csgosl 2.17 config 1 at Sun Aug 20 11:58:26 UTC 2023 (DO NOT TOUCH THIS HEADER LINE!!!)
+# "/data/steam/csgosl/bin/server.sh" start "/data/steam/csgosl/server/srcds_run"  -game csgo  -usercon -condebug -ip 0.0.0.0 
+#    +game_type 0 +game_mode 0 +sv_game_mode_flags 0 +sv_skirmish_id 0
+#    +mapgroup "MyCasualMapGroup"  +map cs_office
+#    -net_port_try 1    -maxplayers_override 16  -tickrate 128    +sv_password ServerPassword    +hostname \"CsgoServerName\" -port 27015 +sv_lan 0
 
 # set to casual mode
 ${CSGO_BASE_DIR}/srcds_linux -game csgo -usercon -uselogdir -condebug -net_port_try 1 -tickrate 128 ${HOSTAGE_RESCUE}

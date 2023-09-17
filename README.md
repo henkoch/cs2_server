@@ -192,9 +192,13 @@ Please see the `Dockerfile`
 * TODO can I use this command to switch mode? `map <mapname> survival`
   * changelevel dz_blacksite survival
 
+* You can mix rescue and demolition, but not arms race.
+
 ### Parameters of interest
 
 * mp_maxrounds
+  * 5 ?
+  * set the win limit to the same
 * mp_friendlyfire
 * mp_roundtime
 * mp_timelimit
@@ -203,9 +207,14 @@ Please see the `Dockerfile`
 * mp_respawnwavetime
 * mp_roundtime_hostage
 * mp_freezetime
+  * 6
+    * seconds from start of game until you can move, gives older players some help.
+  * 10 seconds feels too long.
+* ?? warmuptime, 60
+  * to give slower load machines a change to get in, until the game actually starts.
 * mp_disable_respawn_times
 * mp_disable_respawn_times
 * mp_friendlyfire
 * mp_limitteams
-mp_teamplay
-mp_autoteambalance
+* mp_teamplay
+* mp_autoteambalance

@@ -419,7 +419,7 @@ VAC secure mode is activated.
 GC Connection established for server version 1569, instance idx 1
 ```
 
-####
+#### an unhandled exception occurred while templating
 
 ```text
 TASK [Generate autoexec.cfg from Template] *************************************
@@ -434,4 +434,57 @@ fatal: [localhost]: FAILED! => {"changed": false, "msg": "AnsibleError:
   original message: An unhandled exception occurred while templating '{{server_name}}'. Error was a <class 'ansible.errors.AnsibleError'>, 
   original message: An unhandled exception occurred while templating '{{server_name}}'. Error was a <class 'ansible.errors.AnsibleError'>, 
   original message: recursive loop detected in template string: {{server_name}}"}
+```
+
+### X display troubleshooting
+
+#### X Error of failed request:  BadAccess (attempt to access private resource denied)
+
+setting the DISPLAY to ':2' to fix the issue.
+
+it is because I used the  `--network host` so it was conflicting with the host...
+
+```text
+scripts csgosl:0.1.2
+DDD DISPLAY :1
+_XSERVTransSocketUNIXCreateListener: ...SocketCreateListener() failed
+_XSERVTransMakeAllCOTSServerListeners: server already running
+(EE) 
+Fatal server error:
+(EE) Cannot establish any listening sockets - Make sure an X server isn't already running(EE) 
+[WARN] The VNC server will NOT ask for a password.
+Failed to read: session.ignoreBorder
+Setting default value
+Failed to read: session.forcePseudoTransparency
+Setting default value
+Failed to read: session.colorsPerChannel
+Setting default value
+Failed to read: session.doubleClickInterval
+Setting default value
+Failed to read: session.tabPadding
+
+...
+01/09/2023 15:39:54 Xinerama: Use -noxwarppointer to force XTEST.
+01/09/2023 15:39:54 Xinerama: sub-screen[0]  1920x1080+0+0
+01/09/2023 15:39:54 Xinerama: sub-screen[1]  2560x1440+1920+0
+01/09/2023 15:39:54 blackout rect: 1920x360+0+1080: x=0-1920 y=1080-1439
+01/09/2023 15:39:54 
+
+X11 MIT Shared Memory Attach failed:
+  Is your DISPLAY=:1 on a remote machine?
+  Suggestion, use: x11vnc -display :0 ... for local display :0
+
+caught X11 error:
+01/09/2023 15:39:54 deleted 1 tile_row polling images.
+X Error of failed request:  BadAccess (attempt to access private resource denied)
+  Major opcode of failed request:  130 (MIT-SHM)
+  Minor opcode of failed request:  1 (X_ShmAttach)
+  Serial number of failed request:  56
+  Current serial number in output stream:  59
+```
+
+#### Unknown command
+
+```text
+./csgo/console.log:Unknown command "mp_winlimit"
 ```
