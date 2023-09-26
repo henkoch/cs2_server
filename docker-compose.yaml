@@ -1,0 +1,52 @@
+version: "3.3"
+services:
+  csgo:
+    image: steam_ubuntu:0.1.4
+    container_name: csgo-ds
+    volumes:
+      - type: bind
+        source: ${HOME}/Downloads/csgo_app
+        target: /data/steam/csgo_app
+      - type: bind
+        source: ${PWD}/csgo_scripts
+        target: /data/steam/csgo_git_repo/csgo_scripts
+    network_mode: host
+    restart: unless-stopped
+    command: /data/steam/run_server.sh
+  filebeat:
+    image: elastic/filebeat:8.10.1
+    container_name: filebeat
+    volumes:
+      - type: bind
+        source: ${HOME}/Downloads/csgo_app/csgo/
+        target: /data/steam/csgo_logs
+      - type: bind
+        source: ${PWD}/filebeat.docker.yml
+        target: /usr/share/filebeat/filebeat.yml
+    restart: unless-stopped
+    command: filebeat -e --strict.perms=false 
+  logstash:
+    image: logstash:8.10.1
+    container_name: logstash
+    volumes:
+      - type: bind
+        source: ${PWD}/private_csgo.conf
+        target: /usr/share/logstash/pipeline/csgo.conf
+    restart: unless-stopped
+  elasticsearch:
+    image: elasticsearch:8.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    #restart: unless-stopped
+  kibana:
+    image: kibana:8.10.1
+    container_name: kibana
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+    restart: unless-stopped
+
+
+

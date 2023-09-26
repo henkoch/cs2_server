@@ -488,3 +488,33 @@ X Error of failed request:  BadAccess (attempt to access private resource denied
 ```text
 ./csgo/console.log:Unknown command "mp_winlimit"
 ```
+
+#### Error response from daemon: manifest for elastic/filebeat:latest not found: manifest unknown: manifest
+
+specifying a version works: `docker pull elastic/filebeat:8.9.2`
+
+```text
+docker pull elastic/filebeat
+Using default tag: latest
+Error response from daemon: manifest for elastic/filebeat:latest not found: manifest unknown: manifest unknown
+```
+
+### Troubleshooting ELK
+
+docker logs filebeat 2>&1 | jq '.message'
+
+#### max virtual memory areas vm.max_map_count [65530] is too low
+
+[max-virtual-memory-areas-vm-max-map-count](https://stackoverflow.com/questions/66444027/max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-lea)
+
+```json
+elasticsearch    | {"@timestamp":"2023-09-18T15:09:18.368Z", "log.level":"ERROR", "message":"node validation exception\n[1] bootstrap checks failed. You must address the points described in the following [1] lines before starting Elasticsearch.\nbootstrap check failure [1] of [1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]", "ecs.version": "1.2.0","service.name":"ES_ECS","event.dataset":"elasticsearch.server","process.thread.name":"main","log.logger":"org.elasticsearch.bootstrap.Elasticsearch","elasticsearch.node.name":"a022b85dcbb0","elasticsearch.cluster.name":"docker-cluster"}
+```
+
+#### received plaintext http traffic on an https channel, closing connection
+
+* [Using ElasticSerach 8 via Docker without certificate](https://discuss.elastic.co/t/using-elasticserach-8-via-docker-without-certificate/303617)
+
+```json
+{"@timestamp":"2023-09-18T15:19:22.311Z", "log.level": "WARN", "message":"received plaintext http traffic on an https channel, closing connection Netty4HttpChannel{localAddress=/172.21.0.5:9200, remoteAddress=/172.21.0.4:37800}", "ecs.version": "1.2.0","service.name":"ES_ECS","event.dataset":"elasticsearch.server","process.thread.name":"elasticsearch[b53ce83b838f][transport_worker][T#5]","log.logger":"org.elasticsearch.http.netty4.Netty4HttpServerTransport","elasticsearch.cluster.uuid":"TcIkJJDTSnGz1UoB8LdUYQ","elasticsearch.node.id":"3ncEZVmqRDSYEAoSkByzpg","elasticsearch.node.name":"b53ce83b838f","elasticsearch.cluster.name":"docker-cluster"}
+```

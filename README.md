@@ -27,6 +27,7 @@ Supported environments:
 * [Forum - Counter-Strike: Global Offensive](https://steamcommunity.com/app/730/discussions/)
 * [debian csgo docker image](https://hub.docker.com/r/cm2network/csgo/)
 * [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD)
+* [ELK stack for CSGO](https://github.com/CypressXt/elk4csgo)
 
 ### Overview
 
