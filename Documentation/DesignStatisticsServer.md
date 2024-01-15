@@ -60,31 +60,35 @@ Points to concider when selecting the VM OS
 * container on docker host
 * container in k8s cluster
 
-### filebeat installation selection
+### providing the game statistics html generator
 
-* Selected: repo installation
+* Selected: cron method
 * Reasons
-  * I think it has less CPU impact compared to docker installation
-  * it is easier do describe and understand.
+  * ease of installation
+    * just need to add an entry to the crontab
 
-Points to concider when selecting the filebeat installation method
+Points to concider when selecting the method for running the game statistics html
 
-* CPU load
+* Ease of installation
 * maintainability
-  * ease of understanding the installation
-* security?
 
-#### filebeat installation design option repo installation
+#### game statistics generator via cron
 
 * Description
 * OptionEvaluation A
   * Description:
   * Rating
 
-#### filebeat installation design option docker installation
+#### game statistics generator via systemctl
 
 * Description
 * OptionEvaluation A
   * Description:
   * Rating
 
+#### game statistics generator via container
+
+* Description
+* OptionEvaluation A
+  * Description:
+  * Rating

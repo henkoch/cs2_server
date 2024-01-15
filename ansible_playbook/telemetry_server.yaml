@@ -39,6 +39,28 @@
         apt:
           update_cache: true
           package: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+  - name: Install game statistics generation
+    block:
+      - name: install various cron and web server
+        become: yes
+        apt:
+          update_cache: true
+          package: ['cron', 'lighttpd', 'python3-elasticsearch']
+      - name: make ansible the owner of /var/www/html
+        become: yes
+        ansible.builtin.file:
+          path: /var/www/html
+          state: directory
+          owner: ansible
+      - name: install the script that extracts the game statistics from the ELK stack
+        ansible.builtin.copy:
+          src: files/extract_game_stats_from_elk.py
+          dest: /usr/local/bin/extract_game_stats_from_elk.py
+          mode: '0555'
+      - name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
+        ansible.builtin.cron:
+          name: "update game statistics"
+          job: "/usr/local/bin/extract_game_stats_from_elk.py > /var/www/html/index.html"
   - name: install git repo with the scripts for the csgo server
     become: yes
     become_user: steam
