@@ -19,6 +19,10 @@ Supported environments:
 
 ### References
 
+* [Register game server](https://steamcommunity.com/dev/managegameservers)
+* [](https://www.gamingonlinux.com/2023/09/counter-strike-2-is-out-now-with-linux-support/)
+* [FULL COUNTER STRIKE 2 CONSOLE COMMAND LIST](https://www.ghostcap.com/cs2-commands/)
+
 * [Dedicated Servers List](https://developer.valvesoftware.com/wiki/Dedicated_Servers_List)
 * [How to Make a Counter-Strike: Global Offensive Server on Linux](https://www.hostinger.com/tutorials/how-to-make-a-csgo-server)
 * [forum - Source Dedicated Server (Linux)](https://steamcommunity.com/discussions/forum/14/)

@@ -1,5 +1,6 @@
 arm_parameters.json
 arm_template.json
+csgo_scripts/autoexec.cfg
 vm.lst
 Dockerfile.bookworm
 Dockerfile.focal

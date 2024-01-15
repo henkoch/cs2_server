@@ -3,16 +3,16 @@
 ############################################################
 FROM ubuntu as build_stage
 
-# docker build --tag csgo_server:0.3.0 .
-# docker run -it csgo_server:0.3.0 bash
-# docker run -it  --network host --volume ${HOME}/Downloads/sl_csgo_app/server:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts csgo_server:0.3.0 bash
+# docker build --file Dockerfile.cs2 --tag cs2_server:0.2.6 .
+# docker run -it cs2_server:0.2.6 bash
+# docker run -it  --network host --volume ${HOME}/Downloads/cs2_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts cs2_server:0.2.6 bash
 # su - steam
-# ~/csgo_git_repo/csgo_scripts/run_server.sh
+# ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
 
 # cd ~/csgo_app
 # export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
-# time steamcmd +force_install_dir ~/csgo_app/ +login anonymous +app_update 740 validate +quit
-# ~/csgo_git_repo/csgo_scripts/run_server.sh
+# time steamcmd +force_install_dir ~/csgo_app/ +login STEAM_LOGIN STEAM_PASSWORD +app_update 730 validate +quit
+# ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
 #
 # export LD_LIBRARY_PATH=/usr/lib/games/linux64
 # /data/steam/csgo_app/game/bin/linuxsteamrt64/cs2 -dedicated +map de_dust2
@@ -45,9 +45,6 @@ RUN dpkg --add-architecture i386 \
       htop\
       iproute2\
       less\
-      lib32gcc-s1\
-      lib32stdc++6\
-      libcurl4-gnutls-dev:i386\
       libxcb1\
       locales\
       steamcmd\
@@ -73,8 +70,10 @@ RUN apt-get remove --purge --auto-remove -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 FROM build_stage AS ubuntu-root
-WORKDIR ${STEAMCMDDIR}
+WORKDIR ${HOMEDIR}
 
 #FROM bullseye-root AS bullseye
-## Switch to user
-#USER ${USER}
+# Switch to user
+USER ${USER}
+
+RUN export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32 && /usr/games/steamcmd +quit

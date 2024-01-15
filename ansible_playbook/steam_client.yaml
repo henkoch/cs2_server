@@ -51,6 +51,29 @@
     apt:
       update_cache: true
       package: ['curl', 'htop', 'less', 'vim']
+  - name: Install filebeat
+    # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
+    block:
+      - name: install various tools
+        become: yes
+        apt:
+          update_cache: true
+          package: ['apt-transport-https']
+      - name: Add elasticsearch keyring
+        become: yes
+        ansible.builtin.apt_key:
+          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          keyring: /usr/share/keyrings/elasticsearch-keyring.gpg
+      - name: Add elasticsearch repo
+        become: yes
+        ansible.builtin.apt_repository:
+          repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt {{ ansible_distribution_release }} stable"
+          state: present
+      - name: install elasticsearch
+        become: yes
+        apt:
+          update_cache: true
+          package: ['filebeat']
   - name: add steam users
     become: yes
     user:
@@ -71,17 +94,6 @@
       path: /data/steam/csgo_app
       state: directory
       mode: '0755'
-  - name: install csgo server
-    become: yes
-    become_user: steam
-    ansible.builtin.command:
-      creates: /data/steam/csgo_app/srcds_linux
-      argv:
-        - /usr/games/steamcmd 
-        - +force_install_dir /data/steam/csgo_app
-        - +login anonymous
-        - +app_update 740 validate
-        - +quit
   - name: install git repo with the scripts for the csgo server
     become: yes
     become_user: steam
@@ -90,9 +102,3 @@
       dest: /data/steam/csgo_git_repo
       update: yes
       version: main
-  - name: Generate autoexec.cfg from Template
-    become: yes
-    become_user: steam
-    template:
-      src: files/autoexec.cfg.j2
-      dest: /data/steam/csgo_app/csgo/cfg/autoexec.cfg

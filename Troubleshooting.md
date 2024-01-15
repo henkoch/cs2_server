@@ -1,5 +1,7 @@
 # Troubleshooting
 
+* [Source Dedicated Server Linux](https://steamcommunity.com/discussions/forum/14/)
+
 ## Testing out sub steps
 
 ### Testing out the ansible script
@@ -517,4 +519,386 @@ elasticsearch    | {"@timestamp":"2023-09-18T15:09:18.368Z", "log.level":"ERROR"
 
 ```json
 {"@timestamp":"2023-09-18T15:19:22.311Z", "log.level": "WARN", "message":"received plaintext http traffic on an https channel, closing connection Netty4HttpChannel{localAddress=/172.21.0.5:9200, remoteAddress=/172.21.0.4:37800}", "ecs.version": "1.2.0","service.name":"ES_ECS","event.dataset":"elasticsearch.server","process.thread.name":"elasticsearch[b53ce83b838f][transport_worker][T#5]","log.logger":"org.elasticsearch.http.netty4.Netty4HttpServerTransport","elasticsearch.cluster.uuid":"TcIkJJDTSnGz1UoB8LdUYQ","elasticsearch.node.id":"3ncEZVmqRDSYEAoSkByzpg","elasticsearch.node.name":"b53ce83b838f","elasticsearch.cluster.name":"docker-cluster"}
+```
+
+#### ERROR: Elasticsearch exited unexpectedly, with exit code 137
+
+`docker-compose up elasticsearch`
+
+[Elasticsearch multi-node cluster one node always fails with docker compose](https://stackoverflow.com/questions/62006956/elasticsearch-multi-node-cluster-one-node-always-fails-with-docker-compose)
+
+#### Error! App '730' state is 0x402 after update job
+
+maybe due to loosing the connection with download server.
+
+Solution, re-run the command?
+
+```text
+Update state (0x61) downloading, progress: 38.46 (14022978153 / 36460775173)
+ Update state (0x61) downloading, progress: 38.50 (14037708217 / 36460775173)
+ Update state (0x61) downloading, progress: 38.52 (14045048249 / 36460775173)
+ Update state (0x461) stopping, progress: 38.52 (14045048249 / 36460775173)
+Error! App '730' state is 0x402 after update job.
+CWorkThreadPool::~CWorkThreadPool: work complete queue not empty, 3 items discarded.
+CWorkThreadPool::~CWorkThreadPool: work processing queue not empty: 35 items discarded.
+```
+
+```text
+Update state (0x61) downloading, progress: 77.30 (28183930414 / 36460775173)
+ Update state (0x61) downloading, progress: 77.33 (28196237150 / 36460775173)
+ Update state (0x61) downloading, progress: 77.37 (28208578751 / 36460775173)
+ Update state (0x461) stopping, progress: 77.39 (28215806799 / 36460775173)
+Error! App '730' state is 0x402 after update job.
+CWorkThreadPool::~CWorkThreadPool: work complete queue not empty, 3 items discarded.
+CWorkThreadPool::~CWorkThreadPool: work processing queue not empty: 32 items discarded.
+crash_20231001095737_62.dmp[419]: Uploading dump (out-of-process)
+/tmp/dumps/crash_20231001095737_62.dmp
+
+/data/steam/.local/share/Steam/steamcmd/steamcmd.sh: line 39:   356 Segmentation fault      (core dumped) $DEBUGGER "$STEAMEXE" "$@"
+steam@a4dacf1f72cf:~/csgo_app$ crash_20231001095737_62.dmp[419]: Finished uploading minidump (out-of-process): success = yes
+
+crash_20231001095737_62.dmp[419]: response: CrashID=bp-8f9cde4a-9a05-4c17-88c6-4439f2231001
+
+crash_20231001095737_62.dmp[419]: file ''/tmp/dumps/crash_20231001095737_62.dmp'', upload yes: ''CrashID=bp-8f9cde4a-9a05-4c17-88c6-4439f2231001''
+```
+
+#### failed to dlopen "/data/steam/csgo_app/game/bin/linuxsteamrt64/librendersystemvulkan.so" error=libxcb.so.1: cannot open shared object file: No such file or directory
+
+```text
+Loaded /data/steam/csgo_app/game/bin/linuxsteamrt64/liblocalize.so, got 0x5585b7991db0
+Loaded /data/steam/csgo_app/game/bin/linuxsteamrt64/librendersystemvulkan.so, got (nil)
+ failed to dlopen "/data/steam/csgo_app/game/bin/linuxsteamrt64/librendersystemvulkan.so" error=libxcb.so.1: cannot open shared object file: No such file or directory
+Loaded librendersystemvulkan.so, got (nil)
+ failed to dlopen "librendersystemvulkan.so" error=libxcb.so.1: cannot open shared object file: No such file or directory
+/data/steam/csgo_git_repo/csgo_scripts/run_cs2_server.sh: line 70:   587 Segmentation fault      (core dumped) ${CSGO_BASE_DIR}/bin/linuxsteamrt64/cs2 -game csgo --dedicated -usercon -uselogdir -condebug -net_port_try 1 -tickrate 128 ${HOSTAGE_RESCUE}
+s
+```
+
+### cs2
+
+#### Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/data/steam/.steam/sdk64/steamclient.so'
+
+Fix:
+
+* export LD_LIBRARY_PATH=/usr/lib/games/linux64
+* ~/csgo_app/game/bin/linuxsteamrt64/cs2 -dedicated +map de_dust2
+
+Failed:
+
+export LD_LIBRARY_PATH=/data/steam/csgo_app/bin
+linuxsteamrt64/cs2 -dedicated +map de_dust2
+
+strace -f -o ~/cs2.trc csgo_app/game/bin/linuxsteamrt64/cs2 -dedicated +map de_dust2
+
+```text
+Event System loaded 50 events from file: vpk:/data/steam/csgo_app/game/csgo/pak01.vpk:resource/game.gameevents.
+Event System loaded 152 events from file: vpk:/data/steam/csgo_app/game/csgo/pak01.vpk:./resource/mod.gameevents.
+CEntitySystem::BuildEntityNetworking (parallel build of server) took 41.571 msecs for 211 out of 289 classes
+CHostStateMgr::QueueNewRequest( Idle (console), 1 )
+Source2Init OK
+HostStateRequest::Start(HSR_IDLE):  loop(console) id(1) addons() desc(Idle (console))
+SwitchToLoop console requested:  id [1] addons []
+Host activate: Idle (console)
+Loading map "de_dust2"
+CHostStateMgr::QueueNewRequest( Loading (de_dust2), 2 )
+HostStateRequest::Start(HSR_GAME):  loop(levelload) id(2) addons() desc(Loading (de_dust2))
+SwitchToLoop levelload requested:  id [2] addons []
+SV:  Level loading started for 'de_dust2'
+CL:  CLoopModeLevelLoad::MaybeSwitchToGameLoop switching to "game" loopmode with addons ()
+SwitchToLoop game requested:  id [2] addons []
+SteamGameServer_Init()
+dlopen failed trying to load:
+steamclient.so
+with error:
+steamclient.so: wrong ELF class: ELFCLASS32
+dlopen failed trying to load:
+/data/steam/.steam/sdk64/steamclient.so
+with error:
+/data/steam/.steam/sdk64/steamclient.so: cannot open shared object file: No such file or directory
+[S_API] SteamAPI_Init(): Failed to load module '/data/steam/.steam/sdk64/steamclient.so'
+Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/data/steam/.steam/sdk64/steamclient.so'
+sv_steamauth.cpp 198 Activate():
+Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/data/steam/.steam/sdk64/steamclient.so'
+
+```
+
+#### core dumped - Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/data/steam/.steam/sdk64/steamclient.so'
+
+fix:
+
+* steamcmd +force_install_dir ~/csgo_app/ +login anonymous +app_update 730 validate +quit
+* export LD_LIBRARY_PATH=/data/steam/.local/share/Steam/steamcmd/linux64
+
+```text
+CHostStateMgr::QueueNewRequest( Idle (console), 1 )
+Source2Init OK
+HostStateRequest::Start(HSR_IDLE):  loop(console) id(1) addons() desc(Idle (console))
+SwitchToLoop console requested:  id [1] addons []
+Host activate: Idle (console)
+Loading map "de_dust2"
+CHostStateMgr::QueueNewRequest( Loading (de_dust2), 2 )
+HostStateRequest::Start(HSR_GAME):  loop(levelload) id(2) addons() desc(Loading (de_dust2))
+SwitchToLoop levelload requested:  id [2] addons []
+SV:  Level loading started for 'de_dust2'
+CL:  CLoopModeLevelLoad::MaybeSwitchToGameLoop switching to "game" loopmode with addons ()
+SwitchToLoop game requested:  id [2] addons []
+SteamGameServer_Init()
+dlopen failed trying to load:
+steamclient.so
+with error:
+steamclient.so: cannot open shared object file: No such file or directory
+dlopen failed trying to load:
+/data/steam/.steam/sdk64/steamclient.so
+with error:
+/data/steam/.steam/sdk64/steamclient.so: cannot open shared object file: No such file or directory
+[S_API] SteamAPI_Init(): Failed to load module '/data/steam/.steam/sdk64/steamclient.so'
+Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/data/steam/.steam/sdk64/steamclient.so'
+sv_steamauth.cpp 198 Activate():
+Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/data/steam/.steam/sdk64/steamclient.so'
+
+Segmentation fault (core dumped)
+```
+
+#### strange non update end
+
+```text
+ Update state (0x5) verifying install, progress: 91.88 (31887640407 / 34705746562)
+ Update state (0x5) verifying install, progress: 93.55 (32466967373 / 34705746562)
+ Update state (0x5) verifying install, progress: 94.80 (32899697416 / 34705746562)
+ Update state (0x5) verifying install, progress: 96.50 (33492379428 / 34705746562)
+ Update state (0x5) verifying install, progress: 99.09 (34390762622 / 34705746562)
+ Update state (0x61) downloading, progress: 19.84 (79402 / 400136)
+Success! App '740' fully installed.
+```
+
+```text
+ Update state (0x5) verifying install, progress: 91.88 (31887640407 / 34705746562)
+ Update state (0x5) verifying install, progress: 93.55 (32466967373 / 34705746562)
+ Update state (0x5) verifying install, progress: 94.80 (32899697416 / 34705746562)
+ Update state (0x5) verifying install, progress: 96.50 (33492379428 / 34705746562)
+ Update state (0x5) verifying install, progress: 99.09 (34390762622 / 34705746562)
+ Update state (0x61) downloading, progress: 19.84 (79402 / 400136)
+Success! App '740' fully installed.
+```
+
+```text
+Connecting anonymously to Steam Public...OK
+Waiting for client config...OK
+Waiting for user info...OK
+ Update state (0x3) reconfiguring, progress: 0.00 (0 / 0)
+ Update state (0x5) verifying install, progress: 1.42 (491913771 / 34705746562)
+ Update state (0x5) verifying install, progress: 3.94 (1368476424 / 34705746562)
+...
+ Update state (0x5) verifying install, progress: 83.54 (28993093749 / 34705746562)
+ Update state (0x5) verifying install, progress: 85.95 (29829262174 / 34705746562)
+ Update state (0x5) verifying install, progress: 88.43 (30691138212 / 34705746562)
+ Update state (0x5) verifying install, progress: 90.98 (31576119765 / 34705746562)
+ Update state (0x5) verifying install, progress: 93.57 (32474881585 / 34705746562)
+ Update state (0x5) verifying install, progress: 95.47 (33132393823 / 34705746562)
+ Update state (0x5) verifying install, progress: 97.62 (33879661846 / 34705746562)
+ Update state (0x5) verifying install, progress: 99.92 (34679027061 / 34705746562)
+Success! App '740' fully installed.
+```
+
+#### full process
+
+```text
+
+Connecting anonymously to Steam Public...OK
+Waiting for client config...OK
+Waiting for user info...OK
+ Update state (0x3) reconfiguring, progress: 0.00 (0 / 0)
+ Update state (0x61) downloading, progress: 0.00 (45144 / 34705746562)
+ Update state (0x61) downloading, progress: 0.04 (14815969 / 34705746562)
+ Update state (0x61) downloading, progress: 0.13 (45841484 / 34705746562)
+ Update state (0x61) downloading, progress: 0.22 (77958252 / 34705746562)
+ Update state (0x61) downloading, progress: 0.30 (105243982 / 34705746562)
+ ...
+ Update state (0x61) downloading, progress: 99.66 (34589459383 / 34705746562)
+ Update state (0x61) downloading, progress: 99.75 (34620116384 / 34705746562)
+ Update state (0x61) downloading, progress: 99.83 (34647497638 / 34705746562)
+ Update state (0x61) downloading, progress: 99.89 (34668098693 / 34705746562)
+ Update state (0x61) downloading, progress: 99.97 (34696262258 / 34705746562)
+ Update state (0x81) verifying update, progress: 0.34 (117817799 / 34705746562)
+ Update state (0x81) verifying update, progress: 2.67 (925761585 / 34705746562)
+ Update state (0x81) verifying update, progress: 4.94 (1715218452 / 34705746562)
+ Update state (0x81) verifying update, progress: 7.25 (2515131314 / 34705746562)
+ Update state (0x81) verifying update, progress: 9.16 (3178191409 / 34705746562)
+ Update state (0x81) verifying update, progress: 11.12 (3860121818 / 34705746562)
+ Update state (0x81) verifying update, progress: 13.42 (4658091596 / 34705746562)
+ Update state (0x81) verifying update, progress: 15.60 (5412811434 / 34705746562)
+ Update state (0x81) verifying update, progress: 18.02 (6255004506 / 34705746562)
+ Update state (0x81) verifying update, progress: 20.37 (7070588706 / 34705746562)
+ Update state (0x81) verifying update, progress: 22.69 (7876318098 / 34705746562)
+ Update state (0x81) verifying update, progress: 24.98 (8671013339 / 34705746562)
+ Update state (0x81) verifying update, progress: 27.19 (9435212380 / 34705746562)
+ Update state (0x81) verifying update, progress: 29.52 (10246504194 / 34705746562)
+ Update state (0x81) verifying update, progress: 31.82 (11042047859 / 34705746562)
+ Update state (0x81) verifying update, progress: 34.21 (11872114765 / 34705746562)
+ Update state (0x81) verifying update, progress: 35.85 (12441549096 / 34705746562)
+ Update state (0x81) verifying update, progress: 37.22 (12918364785 / 34705746562)
+ Update state (0x81) verifying update, progress: 39.17 (13593478205 / 34705746562)
+ Update state (0x81) verifying update, progress: 41.18 (14290735391 / 34705746562)
+ Update state (0x81) verifying update, progress: 43.35 (15045468169 / 34705746562)
+ Update state (0x81) verifying update, progress: 45.65 (15842789821 / 34705746562)
+ Update state (0x81) verifying update, progress: 48.03 (16667967957 / 34705746562)
+ Update state (0x81) verifying update, progress: 50.20 (17423502137 / 34705746562)
+ Update state (0x81) verifying update, progress: 52.56 (18239983034 / 34705746562)
+ Update state (0x81) verifying update, progress: 54.88 (19048144754 / 34705746562)
+ Update state (0x81) verifying update, progress: 56.67 (19667229539 / 34705746562)
+ Update state (0x81) verifying update, progress: 58.88 (20434066000 / 34705746562)
+ Update state (0x81) verifying update, progress: 60.78 (21095786200 / 34705746562)
+ Update state (0x81) verifying update, progress: 62.83 (21804997506 / 34705746562)
+ Update state (0x81) verifying update, progress: 65.17 (22616198493 / 34705746562)
+ Update state (0x81) verifying update, progress: 67.56 (23447681871 / 34705746562)
+ Update state (0x81) verifying update, progress: 69.90 (24259393254 / 34705746562)
+ Update state (0x81) verifying update, progress: 72.22 (25063678248 / 34705746562)
+ Update state (0x81) verifying update, progress: 74.45 (25836841613 / 34705746562)
+ Update state (0x81) verifying update, progress: 76.61 (26588983760 / 34705746562)
+ Update state (0x81) verifying update, progress: 78.90 (27382414000 / 34705746562)
+ Update state (0x81) verifying update, progress: 81.20 (28181235021 / 34705746562)
+ Update state (0x81) verifying update, progress: 83.33 (28921932809 / 34705746562)
+ Update state (0x81) verifying update, progress: 85.71 (29746417302 / 34705746562)
+ Update state (0x81) verifying update, progress: 88.06 (30563463007 / 34705746562)
+ Update state (0x81) verifying update, progress: 90.26 (31326482436 / 34705746562)
+ Update state (0x81) verifying update, progress: 92.48 (32097493824 / 34705746562)
+ Update state (0x81) verifying update, progress: 94.43 (32773849201 / 34705746562)
+ Update state (0x81) verifying update, progress: 95.78 (33240314426 / 34705746562)
+ Update state (0x81) verifying update, progress: 97.83 (33951467972 / 34705746562)
+ Update state (0x101) committing, progress: 20.51 (7119863557 / 34705746562)
+Success! App '740' fully installed.
+```
+
+#### Your server needs to be restarted in order to receive the latest update
+
+* [](https://steamcommunity.com/discussions/forum/13/1696043806570333687/)
+* did a complede delete and then re-install of csgo, and it gave the same error
+* [Issue](https://steamcommunity.com/discussions/forum/14/6367585250000001877/)
+
+```text
+GC Connection established for server version 1575, instance idx 1
+MasterRequestRestart
+Your server needs to be restarted in order to receive the latest update.
+MasterRequestRestart
+Your server needs to be restarted in order to receive the latest update.
+Host state 5 at Sat Oct 14 21:35:43 2023
+```
+
+#### CS2 client unable to login to password protected server via UI
+
+See: [CS2 how to set a password on a self-hosted CS2 server, that clients can log in to](https://steamcommunity.com/discussions/forum/14/6367585698107819940/)
+
+workaround; use the console: `connect 192.168.8.194:27015; password ServerPassword`
+
+* Enable the console
+* Find the address of the server via the global server browser
+* view the server info and copy the Address
+* close the server UI
+* open the console
+* type 'connect '
+* right click mouse and pase in the adress
+* type '; password'
+* type the server password
+* press enter
+* you should now be connected to the server
+
+#### CS2
+
+LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+* docker run -it  --network host --volume ${HOME}/Downloads/cs2_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts cs2_server:0.2.3 bash
+* su steam
+* export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
+* steamcmd +quit
+* ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
+
+This also works:
+
+* docker run -it  --network host --volume ${HOME}/Downloads/cs2_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts cs2_server:0.2.3 bash
+* su - steam
+* export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
+* steamcmd +quit
+* ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
+
+This works:
+
+* docker run -it  --network host --volume ${HOME}/Downloads/cs2_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts cs2_server:0.2.3 bash
+* su - steam
+* export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
+* steamcmd +force_install_dir ~/csgo_app/ +login STEAM_LOGIN STEAM_PASSWORD +app_update 730 validate +quit
+* ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
+
+```text
+cs2-ds           | Unknown command 'sv_setsteamaccount'!
+cs2-ds           | L 10/17/2023 - 15:43:18: server_cvar: "sv_password" "***PROTECTED***"
+cs2-ds           | exec: couldn't exec '{*}cfg/banned_user.cfg', unable to read file
+cs2-ds           | exec: couldn't exec '{*}cfg/banned_ip.cfg', unable to read file
+cs2-ds           | III Executed cs2_server_settings Config!
+cs2-ds           | HostStateRequest::Start(HSR_GAME):  loop(levelload) id(2) addons() desc(Loading (cs_office))
+cs2-ds           | SwitchToLoop levelload requested:  id [2] addons []
+cs2-ds           | SV:  Level loading started for 'cs_office'
+cs2-ds           | CL:  CLoopModeLevelLoad::MaybeSwitchToGameLoop switching to "game" loopmode with addons ()
+cs2-ds           | SwitchToLoop game requested:  id [2] addons []
+cs2-ds           | SteamGameServer_Init()
+cs2-ds           | Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/root/.steam/sdk64/steamclient.so'
+cs2-ds           | dlopen failed trying to load:
+cs2-ds           | /root/.steam/sdk64/steamclient.so
+cs2-ds           | with error:
+cs2-ds           | /root/.steam/sdk64/steamclient.so: cannot open shared object file: No such file or directory
+cs2-ds           | [S_API] SteamAPI_Init(): Failed to load module '/root/.steam/sdk64/steamclient.so'
+cs2-ds           |  0 Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/root/.steam/sdk64/steamclient.so'
+cs2-ds           | 
+cs2-ds           | /data/steam/csgo_git_repo/csgo_scripts/run_cs2_server.sh: line 81:     9 Segmentation fault      (core dumped) /data/steam/csgo_app/game/bin/linuxsteamrt64/cs2 -dedicated -usercon -uselogdir -condebug -secure -nobots +log on ${HOSTAGE_RESCUE} +exec cs2_server_settings.cfg
+```
+
+#### Action failed with '[index_not_green_timeout] Timeout waiting for the status of the [.kibana_ingest_8.10.1_001] index to become 'green'
+
+Turns out it was elasticsearch that had the problem (I notices kibana mentionen a porblem connecting to elasticsearch)
+
+```text
+{"@timestamp":"2023-10-18T12:51:57.657Z", "log.level": "WARN", "message":"high disk watermark [90%] exceeded on [GWhTPhtIQOmzC-m6yiOO5Q][1c7d3a882e12][/usr/share/elasticsearch/data] free: 18.6gb[8.2%], shards will be relocated away from this node; currently relocating away shards totalling [0] bytes; the node is expected to continue to exceed the high disk watermark when these relocations are complete", "ecs.version": "1.2.0","service.name":"ES_ECS","event.dataset":"elasticsearch.server","process.thread.name":"elasticsearch[1c7d3a882e12][masterService#updateTask][T#2]","log.logger":"org.elasticsearch.cluster.routing.allocation.DiskThresholdMonitor","elasticsearch.cluster.uuid":"3cy5qpNuRh2QCyfS7ImCPg","elasticsearch.node.id":"GWhTPhtIQOmzC-m6yiOO5Q","elasticsearch.node.name":"1c7d3a882e12","elasticsearch.cluster.name":"docker-cluster"}
+```
+
+```text
+[2023-10-18T12:43:42.891+00:00][INFO ][savedobjects-service] [.kibana_task_manager] CREATE_NEW_TARGET -> CREATE_NEW_TARGET. took: 76011ms.
+[2023-10-18T12:43:42.893+00:00][ERROR][savedobjects-service] [.kibana_ingest] Action failed with '[index_not_green_timeout] Timeout waiting for the status of the [.kibana_ingest_8.10.1_001] index to become 'green' Refer to https://www.elastic.co/guide/en/kibana/8.10/resolve-migrations-failures.html#_repeated_time_out_requests_that_eventually_fail for information on how to resolve the issue.'. Retrying attempt 5 in 32 seconds.
+```
+
+#### crash_20231020080431_125.dmp[145]: error: libcurl.so: cannot open shared object file: No such file or directory
+
+```text
+OK
+Waiting for client config...OK
+Waiting for user info...OK
+ Update state (0x3) reconfiguring, progress: 0.00 (0 / 0)
+ Update state (0x3) reconfiguring, progress: 0.00 (0 / 0)
+ Update state (0x3) reconfiguring, progress: 0.00 (0 / 0)
+ Update state (0x3) reconfiguring, progress: 0.00 (0 / 0)
+ Update state (0x1) running, progress: 0.00 (0 / 0)
+ Update state (0x61) downloading, progress: 2.03 (13496883 / 665872418)
+ Update state (0x61) downloading, progress: 37.49 (249656563 / 665872418)
+ Update state (0x61) downloading, progress: 67.98 (452640248 / 665872418)
+ Update state (0x61) downloading, progress: 69.24 (461028856 / 665872418)
+ Update state (0x61) downloading, progress: 70.76 (471166099 / 665872418)
+ Update state (0x61) downloading, progress: 72.16 (480492643 / 665872418)
+ Update state (0x61) downloading, progress: 75.52 (502856830 / 665872418)
+ Update state (0x61) downloading, progress: 81.10 (539993338 / 665872418)
+ Update state (0x61) downloading, progress: 83.20 (553980707 / 665872418)
+ Update state (0x61) downloading, progress: 87.62 (583466754 / 665872418)
+ Update state (0x61) downloading, progress: 93.29 (621215490 / 665872418)
+ Update state (0x61) downloading, progress: 98.74 (657497858 / 665872418)
+ Update state (0x81) verifying update, progress: 96.90 (645260730 / 665872418)
+dlmopen steamservice.so failed: steamservice.so: cannot open shared object file: No such file or directory
+Success! App '730' fully installed.
+crash_20231020080431_125.dmp[145]: Uploading dump (out-of-process)
+/tmp/dumps/crash_20231020080431_125.dmp
+
+crash_20231020080431_125.dmp[145]: Finished uploading minidump (out-of-process): success = no
+
+crash_20231020080431_125.dmp[145]: error: libcurl.so: cannot open shared object file: No such file or directory
+
+crash_20231020080431_125.dmp[145]: file ''/tmp/dumps/crash_20231020080431_125.dmp'', upload no: ''libcurl.so: cannot open shared object file: No such file or directory''
+
+Segmentation fault (core dumped)
 ```

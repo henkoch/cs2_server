@@ -1,27 +1,27 @@
 version: "3.3"
 services:
-  csgo:
-    image: steam_ubuntu:0.1.4
-    container_name: csgo-ds
+  cs2:
+    image: cs2_server:0.2.6
+    container_name: cs2-ds
     volumes:
       - type: bind
-        source: ${HOME}/Downloads/csgo_app
+        source: ${HOME}/Downloads/cs2_app
         target: /data/steam/csgo_app
       - type: bind
         source: ${PWD}/csgo_scripts
         target: /data/steam/csgo_git_repo/csgo_scripts
     network_mode: host
     restart: unless-stopped
-    command: /data/steam/run_server.sh
+    command: /data/steam/csgo_git_repo/csgo_scripts/run_cs2_server.sh
   filebeat:
     image: elastic/filebeat:8.10.1
     container_name: filebeat
     volumes:
       - type: bind
-        source: ${HOME}/Downloads/csgo_app/csgo/
+        source: ${HOME}/Downloads/cs2_app/game/csgo
         target: /data/steam/csgo_logs
       - type: bind
-        source: ${PWD}/filebeat.docker.yml
+        source: ${PWD}/ansible_playbook/files/filebeat.docker.yml
         target: /usr/share/filebeat/filebeat.yml
     restart: unless-stopped
     command: filebeat -e --strict.perms=false 
@@ -30,16 +30,19 @@ services:
     container_name: logstash
     volumes:
       - type: bind
-        source: ${PWD}/private_csgo.conf
+        source: ${PWD}/ansible_playbook/files/logstash_csgo_console_log.conf
         target: /usr/share/logstash/pipeline/csgo.conf
     restart: unless-stopped
   elasticsearch:
     image: elasticsearch:8.10.1
     container_name: elasticsearch
+    ports:
+    - "127.0.0.1:9200:9200"
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
       - xpack.security.enrollment.enabled=false
+      - ES_JAVA_OPTS=-Xms750m -Xmx750m
     #restart: unless-stopped
   kibana:
     image: kibana:8.10.1
