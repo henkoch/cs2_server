@@ -67,7 +67,7 @@
       - name: Add elasticsearch repo
         become: yes
         ansible.builtin.apt_repository:
-          repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt {{ ansible_distribution_release }} stable"
+          repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
           state: present
       - name: install elasticsearch
         become: yes
