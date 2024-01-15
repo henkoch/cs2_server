@@ -54,7 +54,7 @@
   - name: Install filebeat
     # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
     block:
-      - name: install various tools
+      - name: install apt-transport tools
         become: yes
         apt:
           update_cache: true
@@ -74,6 +74,10 @@
         apt:
           update_cache: true
           package: ['filebeat']
+      - name: Enable filebeat service, and not touch the state
+        ansible.builtin.service:
+          name: filebeat
+          enabled: yes
   - name: add steam users
     become: yes
     user:
