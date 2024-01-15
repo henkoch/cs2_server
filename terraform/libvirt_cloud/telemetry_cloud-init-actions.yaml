@@ -1,0 +1,30 @@
+#cloud-config
+# Add groups to the system
+groups:
+  - hashicorp
+
+# Add users to the system. Users are added after groups are added.
+users:
+  - default
+  - name: ansible
+    gecos: ansible
+    shell: /bin/bash
+    primary_group: hashicorp
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    lock_passwd: false
+    ssh_authorized_keys:
+      - ${ansible_ssh_public_key}
+
+# install packages
+packages:
+  - ansible
+  - git
+
+# 
+runcmd:
+  - cd /home/ansible; git clone -b csgo_conf_dev https://github.com/henkoch/csgo_server
+  - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "server_name=${server_name}" -v telemetry_server.yaml
+  - cp /var/log/cloud-init-output.log /home/ansible
+  - date > DONE.txt
+  - chown -R ansible:ansible /home/ansible

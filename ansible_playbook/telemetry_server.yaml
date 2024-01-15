@@ -1,0 +1,49 @@
+---
+- name: playbook to install the teletry server for the CS2 product
+  hosts: localhost
+  tasks:
+  - name: use apt to update its cache
+    become: yes
+    apt:
+       update_cache: yes
+  - name: install setfacl
+    become: yes
+    apt:
+      update_cache: true
+      package: acl
+  - name: add software-properties-common
+    become: yes
+    apt:
+       package: software-properties-common
+       update_cache: yes
+  - name: install various tools
+    become: yes
+    apt:
+      update_cache: true
+      package: ['curl', 'htop', 'less', 'vim']
+  - name: Install docker-ce as container runtime
+    # https://www.elastic.co/guide/en/beats/filebeat/current/setup-repositories.html
+    block:
+      - name: Add docker-ce keyring
+        become: yes
+        ansible.builtin.apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+      - name: Add docker-ce repo
+        become: yes
+        ansible.builtin.apt_repository:
+          repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+          state: present
+      - name: install docker-ce
+        become: yes
+        apt:
+          update_cache: true
+          package: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+  - name: install git repo with the scripts for the csgo server
+    become: yes
+    become_user: steam
+    git:
+      repo: 'https://github.com/henkoch/csgo_server.git'
+      dest: /data/steam/csgo_git_repo
+      update: yes
+      version: main
