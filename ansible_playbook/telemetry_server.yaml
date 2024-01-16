@@ -39,6 +39,11 @@
         apt:
           update_cache: true
           package: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+      - name: allow ansible to do docker operations.
+        ansible.builtin.user:
+          name: ansible
+          append: true
+          group: docker
   - name: Install game statistics generation
     block:
       - name: install various cron and web server
