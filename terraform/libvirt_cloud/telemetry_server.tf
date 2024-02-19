@@ -1,6 +1,6 @@
 # https://registry.terraform.io/providers/dmacvicar/libvirt/latest/docs/resources/cloudinit
 data "template_file" "telemetry_user_data" {
-  template = file("./telemetry_cloud-init-actions.yaml")
+  template = file("./telemetry_server-init-actions.yaml")
 
   # left hand var names are the var names used in the cloud-init yaml.
   vars = {
@@ -11,13 +11,13 @@ data "template_file" "telemetry_user_data" {
 }
 
 resource "libvirt_cloudinit_disk" "telemetry_cloudinit" {
-  name      = "telemetry_cloudinit.iso"
+  name      = "csgo_telemetry_cloudinit.iso"
   user_data = data.template_file.telemetry_user_data.rendered
 }
 
 # Defining VM Volume
 resource "libvirt_volume" "telemetry-qcow2" {
-  name = "telemetry.qcow2"
+  name = "csgo_telemetry.qcow2"
   pool = "default" # List storage pools using virsh pool-list
   source = "/var/ubuntu_jammy_cloudimg.qcow2"
   format = "qcow2"

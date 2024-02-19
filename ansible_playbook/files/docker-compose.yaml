@@ -5,7 +5,7 @@ services:
     container_name: logstash
     volumes:
       - type: bind
-        source: ${PWD}/ansible_playbook/files/logstash_csgo_console_log.conf
+        source: ${PWD}/logstash_csgo_console_log.conf
         target: /usr/share/logstash/pipeline/csgo.conf
     restart: unless-stopped
   elasticsearch:

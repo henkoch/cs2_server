@@ -2,7 +2,7 @@
 # https://github.com/dmacvicar/terraform-provider-libvirt/blob/main/examples/v0.12/ubuntu/ubuntu-example.tf
 # https://grantorchard.com/dynamic-cloudinit-content-with-terraform-file-templates/
 data "template_file" "user_data" {
-  template = file("./csgo_cloud-init-actions.yaml")
+  template = file("./game_server-init-actions.yaml")
 
   # left hand var names are the var names used in the cloud-init yaml.
   vars = {
@@ -16,20 +16,20 @@ data "template_file" "user_data" {
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {
-  name      = "csgo_commoninit.iso"
+  name      = "csgo_server_commoninit.iso"
   user_data = data.template_file.user_data.rendered
 }
 
 # Defining VM Volume
 resource "libvirt_volume" "csgo-qcow2" {
-  name = "csgo.qcow2"
+  name = "csgo_server-root.qcow2"
   pool = "default" # List storage pools using virsh pool-list
   source = "/var/ubuntu_jammy_cloudimg.qcow2"
   format = "qcow2"
 }
 
 resource "libvirt_volume" "csgo-data-qcow2" {
-  name = "csgo-data.qcow2"
+  name = "csgo_server-data.qcow2"
   pool = "default" # List storage pools using virsh pool-list
   format = "qcow2"
   size = 45097156608
@@ -37,7 +37,7 @@ resource "libvirt_volume" "csgo-data-qcow2" {
 
 # Define KVM domain to create
 resource "libvirt_domain" "csgo-vm" {
-  name   = "csgo_vm"
+  name   = "csgo_game_vm"
   memory = "4096"
   vcpu   = 4
 
