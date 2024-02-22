@@ -10,7 +10,7 @@ data "template_file" "user_data" {
     csgo_client_access_password = var.csgo_client_access_password
     csgo_server_rcon_password = var.csgo_server_rcon_password
     one_for_local_zero_for_global = var.one_for_local_zero_for_global
-    server_name = var.server_name
+    vm_hostname = var.server_name
     steam_server_token = var.steam_server_token
   }
 }

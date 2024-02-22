@@ -2,7 +2,7 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - /data/steam/csgo_logs/*.log
+    - /data/steam/csgo_app/game/csgo/*.log
 
 output.logstash:
-  hosts: ["logstash:5192"]
+  hosts: ["logstash:5044"]

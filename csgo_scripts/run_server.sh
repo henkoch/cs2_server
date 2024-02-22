@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Script for running the CSGO server.
+
 CSGO_BASE_DIR="/data/steam/csgo_app"
 CSGO_SCRIPTS_DIR="/data/steam/csgo_git_repo/csgo_scripts"
 
@@ -67,4 +69,4 @@ DANGER_ZONE="-maxplayers 12 -nobots  +game_type 6 +game_mode 0 +map dz_blacksite
 #    -net_port_try 1    -maxplayers_override 16  -tickrate 128    +sv_password ServerPassword    +hostname \"CsgoServerName\" -port 27015 +sv_lan 0
 
 # set to casual mode
-${CSGO_BASE_DIR}/srcds_linux -game csgo -usercon -uselogdir -condebug -net_port_try 1 -tickrate 128 ${HOSTAGE_RESCUE}
+${CSGO_BASE_DIR}/srcds_linux -game csgo -usercon -uselogdir -condebug -net_port_try 1 -tickrate 128 ${DANGER_ZONE}

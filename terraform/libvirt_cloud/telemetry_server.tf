@@ -6,7 +6,7 @@ data "template_file" "telemetry_user_data" {
   vars = {
     ansible_ssh_public_key = file(var.ansible_ssh_public_key_filename)
     csgo_client_access_password = var.csgo_client_access_password
-    server_name = var.server_name
+    vm_hostname = var.server_name
   }
 }
 

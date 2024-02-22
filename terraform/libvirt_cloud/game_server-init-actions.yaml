@@ -1,4 +1,6 @@
 #cloud-config
+fqdn: ${vm_hostname}
+
 # Add groups to the system
 groups:
   - hashicorp

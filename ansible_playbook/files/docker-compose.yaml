@@ -3,16 +3,20 @@ services:
   logstash:
     image: logstash:8.10.1
     container_name: logstash
+    ports:
+    - "5400:5400"
     volumes:
       - type: bind
         source: ${PWD}/logstash_csgo_console_log.conf
         target: /usr/share/logstash/pipeline/csgo.conf
+    depends_on:
+      - elasticsearch
     restart: unless-stopped
   elasticsearch:
     image: elasticsearch:8.10.1
     container_name: elasticsearch
     ports:
-    - "127.0.0.1:9200:9200"
+    - "9200:9200"
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -25,6 +29,3 @@ services:
     environment:
       ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
     restart: unless-stopped
-
-
-

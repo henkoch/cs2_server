@@ -44,6 +44,22 @@
           name: ansible
           append: true
           group: docker
+  - name: Install haproxy
+    block:
+      - name: install haproxy
+        become: yes
+        apt:
+          update_cache: true
+          package: ['haproxy'] 
+      - name: install the haproxy configuration
+        ansible.builtin.copy:
+          src: files/telemetry_haproxy.cfg
+          dest: /etc/haproxy/haproxy.cfg
+          mode: '0644'
+      - name: Restart HAProxy
+        systemd:
+          name: haproxy
+          state: restarted
   - name: Install game statistics generation
     block:
       - name: install various cron and web server

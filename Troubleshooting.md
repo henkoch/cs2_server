@@ -902,3 +902,11 @@ crash_20231020080431_125.dmp[145]: file ''/tmp/dumps/crash_20231020080431_125.dm
 
 Segmentation fault (core dumped)
 ```
+
+#### 02/20 17:34:35 [InputService] exec: couldn't exec '{*}cfg/cs2_server_settings.cfg', unable to read file
+
+```text
+02/20 17:34:35 [InputService] exec: couldn't exec '{*}cfg/cs2_server_settings.cfg', unable to read file
+02/20 17:34:36 [InputService] exec: couldn't exec '{*}cfg/csgosl/execonmapchange.cfg', unable to read file
+
+```

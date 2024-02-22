@@ -56,7 +56,17 @@ Steps:
 * login to the VM
 * sudo -i
 * su - steam
-* ~/csgo_git_repo/csgo_scripts/run_server.sh
+* ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
+
+#### Manually installing the csgo server
+
+* ssh in as ansible
+* sudo -
+* su - steam
+* cd ~/csgo_app
+* export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
+* time steamcmd +force_install_dir ~/csgo_app/ +login STEAM_LOGIN STEAM_PASSWORD +app_update 730 validate +quit
+  ~ 145 minutes.
 
 #### Example of deployment script
 
