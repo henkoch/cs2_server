@@ -4,5 +4,9 @@ filebeat.inputs:
   paths:
     - /data/steam/csgo_app/game/csgo/*.log
 
+processors:
+- add_tags:
+    tags: [cs2_log]
+
 output.logstash:
-  hosts: ["logstash:5044"]
+  hosts: ["logstash:5045"]
