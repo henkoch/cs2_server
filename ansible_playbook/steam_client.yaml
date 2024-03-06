@@ -85,6 +85,12 @@
       comment: "SteamCMD owner"
       home: "/data/steam"
       shell: "/usr/bin/bash"
+  - name: allow steam user to update steamcmd
+    become: yes
+    ansible.builtin.file:
+      path: /usr/lib/games
+      group: steam
+      mode: g+w
   - name: Adding ansible user to group steam
     become: yes
     user: 

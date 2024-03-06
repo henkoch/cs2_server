@@ -908,5 +908,128 @@ Segmentation fault (core dumped)
 ```text
 02/20 17:34:35 [InputService] exec: couldn't exec '{*}cfg/cs2_server_settings.cfg', unable to read file
 02/20 17:34:36 [InputService] exec: couldn't exec '{*}cfg/csgosl/execonmapchange.cfg', unable to read file
+```
 
+#### !!! Fatal Error: Download of package (steamcmd_linux) failed after 0 bytes (0)
+
+Fix: make /usr/lib/games writable for the steam group
+
+as root:
+
+```bash
+chgrp steam /usr/lib/games
+chmod g+w /usr/lib/games
+ls -ld /usr/lib/games
+```
+
+[cs2 update fails on Ubuntu server](https://steamcommunity.com/discussions/forum/14/4298194004195002711/)
+
+Files seems to be stored in ~/Steam/package/
+
+```text
+[ 91%] Downloading update (55459 of 59597 KB)...
+[ 93%] Downloading update (56069 of 59597 KB)...
+[ 94%] Downloading update (56852 of 59597 KB)...
+[ 95%] Downloading update (57505 of 59597 KB)...
+[ 96%] Downloading update (58266 of 59597 KB)...
+[ 97%] Downloading update (58864 of 59597 KB)...
+[ 98%] Downloading update (59545 of 59597 KB)...
+[ 99%] Downloading update (59597 of 59597 KB)...
+[100%] Download Complete.
+[100%] !!! Fatal Error: Download of package (steamcmd_linux) failed after 0 bytes (0).
+```
+
+* /usr/lib/games/steam/steamcmd +force_install_dir ~/csgo_app/ +login USER_ID PASSWORD +app_update 730 validate +quit
+
+* cd Steam/packages
+* sha256sum steamcmd_*
+
+#### Cert request for invalid failed with reason code 5005.  We're not logged into Steam
+
+Fix: set the token via `+sv_setsteamaccount TOKEN_ID` to the cs2 command
+
+Set token on [Steam Game Server Account Management](https://steamcommunity.com/dev/managegameservers)
+
+#### How to update the server
+
+version  : 1.39.9.4/13994 9961 insecure  public
+
+#### [----] !!! Fatal Error: Failed to load steamconsole.so
+
+Fix: `export LD_LIBRARY_PATH=/usr/lib/games/linux32`
+
+```text
+[----] !!! Fatal Error: Failed to load steamconsole.so
+```
+
+#### dlmopen steamservice.so failed: steamservice.so: cannot open shared object file: No such file or directory
+
+TODO is this required?
+doesn't seem like it is required.
+
+```text
+ Update state (0x81) verifying update, progress: 69.42 (2085239448 / 3003961811)
+ Update state (0x81) verifying update, progress: 94.24 (2830911161 / 3003961811)
+dlmopen steamservice.so failed: steamservice.so: cannot open shared object file: No such file or directory
+Success! App '730' fully installed.
+```
+
+#### invalid password
+
+Connect 23.523.23.6:27015; password gamefaqs
+
+### troubleshooting network performance
+
+#### tick 27502 empty starved 80=1250.0ms ping=219ms] generating substitute command 8036 from 8035
+
+```text
+428.258701 UNEXPECTED LONG FRAME DETECTED: 23.61ms elapsed, 23.27ms sim time, 1 ticks, 27489..27489.
+['PLAYER' tick 27502 empty starved 80=1250.0ms ping=219ms] generating substitute command 8036 from 8035
+['PLAYER' tick 27518 empty starved 96=1500.0ms ping=219ms] generating substitute command 8052 from 8051
+SV:  Sending full update to client PLAYER (reason:  can't find client frame for world snapshot 27393 (10) on server tick 27521)
+['PLAYER' tick 27534 empty starved 112=1750.0ms ping=219ms] generating substitute command 8068 from 8067
+['PLAYER' tick 27550 empty starved 128=2000.0ms ping=219ms] generating substitute command 8084 from 8083
+['PLAYER' tick 27566 empty starved 144=2250.0ms ping=219ms] generating substitute command 8100 from 8099
+['PLAYER' tick 27582 empty starved 160=2500.0ms ping=219ms] generating substitute command 8116 from 8115
+['PLAYER' tick 27598 empty starved 176=2750.0ms ping=219ms] generating substitute command 8132 from 8131
+L 03/06/2024 - 10:03:50: "Walt<5><BOT><CT>" [445 -1384 -416] killed other "prop_dynamic<47>" [448 -1403 -416] with "hkp2000"
+['PLAYER' tick 27614 empty starved 192=3000.0ms ping=219ms] generating substitute command 8148 from 8147
+['PLAYER' tick 27630 empty starved 208=3250.0ms ping=219ms] generating substitute command 8164 from 8163
+['PLAYER' tick 27646 empty starved 224=3500.0ms ping=219ms] generating substitute command 8180 from 8179
+430.759086 UNEXPECTED LONG FRAME DETECTED: 15.87ms elapsed, 15.62ms sim time, 1 ticks, 27649..27649.
+['PLAYER' tick 27662 empty starved 240=3750.0ms ping=219ms] generating substitute command 8196 from 8195
+['PLAYER' tick 27678 empty starved 256=4000.0ms ping=273ms] generating substitute command 8212 from 8211
+['PLAYER' tick 27694 empty starved 272=4250.0ms ping=840ms] generating substitute command 8228 from 8227
+['PLAYER' tick 27706 depth=3 (8240..8242) starved 283=4421.9ms ping=1015ms] OnBufferNotStarved(), resolved starve queue
+431.727882 UNEXPECTED LONG FRAME DETECTED: 15.56ms elapsed, 15.24ms sim time, 1 ticks, 27711..27711.
+432.446917 UNEXPECTED LONG FRAME DETECTED: 15.58ms elapsed, 15.34ms sim time, 1 ticks, 27757..27757.
+433.321996 UNEXPECTED LONG FRAME DETECTED: 15.58ms elapsed, 15.02ms sim time, 1 ticks, 27813..27813.
+433.354623 UNEXPECTED LONG FRAME DETECTED: 16.97ms elapsed, 16.64ms sim time, 1 ticks, 27815..27815.
+['PLAYER' tick 27958 empty starved 16=250.0ms ping=282ms loss in/out = 1.48%/1.48%] generating substitute command 8492 from 8491
+['PLAYER' tick 27974 empty starved 32=500.0ms ping=282ms loss in/out = 1.48%/1.48%] generating substitute command 8508 from 8507
+['PLAYER' tick 27990 empty starved 48=750.0ms ping=282ms loss in/out = 1.48%/1.48%] generating substitute command 8524 from 8523
+['PLAYER' tick 28006 empty starved 64=1000.0ms ping=282ms loss in/out = 1.48%/1.48%] generating substitute command 8540 from 8539
+['PLAYER' tick 28007 empty starved 64=1000.0ms ping=282ms loss in/out = 1.48%/1.48%] OnSimulateUserCommands(), extended starvation
+['PLAYER' tick 28020 depth=2 (8554..8555) starved 77=1203.1ms ping=309ms loss in/out = 1.48%/1.48%] OnBufferNotStarved(), resolved starve queue
+['PLAYER' tick 28037 empty starved 16=250.0ms ping=309ms loss in/out = 1.48%/1.48%] generating substitute command 8571 from 8570
+['PLAYER' tick 28053 empty starved 32=500.0ms ping=358ms loss in/out = 1.48%/1.48%] generating substitute command 8587 from 8586
+['PLAYER' tick 28069 empty starved 48=750.0ms ping=409ms loss in/out = 1.48%/1.48%] generating substitute command 8603 from 8602
+['PLAYER' tick 28085 empty starved 64=1000.0ms ping=417ms loss in/out = 1.48%/1.48%] generating substitute command 8619 from 8618
+['PLAYER' tick 28086 empty starved 64=1000.0ms ping=417ms loss in/out = 1.48%/1.48%] OnSimulateUserCommands(), extended starvation
+['PLAYER' tick 28101 empty starved 80=1250.0ms ping=392ms loss in/out = 1.48%/1.48%] generating substitute command 8635 from 8634
+['PLAYER' tick 28112 depth=5 (8646..8650) starved 90=1406.2ms ping=199ms loss in/out = 1.48%/1.48%] OnBufferNotStarved(), resolved starve queue
+['PLAYER' tick 28157 empty starved 16=250.0ms ping=41ms loss in/out = 1.48%/1.48%] generating substitute command 8691 from 8690
+['PLAYER' tick 28173 empty starved 32=500.0ms ping=41ms loss in/out = 1.48%/1.48%] generating substitute command 8707 from 8706
+L 03/06/2024 - 10:03:59: "Telsen<3><BOT><TERRORIST>" [1450 -921 -416] killed "PLAYER<0><[U:1:65095784]><CT>" [1568 -1045 -416] with "glock"
+['PLAYER' tick 28210 empty starved 16=250.0ms ping=243ms loss in/out = 1.48%/1.48%] generating substitute command 8744 from 8743
+['PLAYER' tick 28226 empty starved 32=500.0ms ping=222ms loss in/out = 1.48%/1.48%] generating substitute command 8760 from 8759
+['PLAYER' tick 28265 empty starved 16=250.0ms ping=118ms] generating substitute command 8799 from 8798
+['PLAYER' tick 28276 depth=2 (8814..8815) ping=51ms] CQ bloat: removed 4, max: 4, 4 ticks this frame
+['PLAYER' tick 28397 empty starved 16=250.0ms ping=68ms] generating substitute command 8935 from 8934
+['PLAYER' tick 28446 depth=2 (8988..8989) ping=43ms] CQ bloat: removed 4, max: 4, 4 ticks this frame
+['PLAYER' tick 28510 empty starved 16=250.0ms ping=124ms] generating substitute command 9052 from 9051
+['PLAYER' tick 28592 depth=2 (9138..9139) ping=3ms] CQ bloat: removed 4, max: 4, 4 ticks this frame
+449.261264 UNEXPECTED LONG FRAME DETECTED: 15.40ms elapsed, 15.04ms sim time, 1 ticks, 28833..28833.
+449.297467 UNEXPECTED LONG FRAME DETECTED: 20.46ms elapsed, 20.11ms sim time, 1 ticks, 28835..28835.
+449.314517 UNEXPECTED LONG FRAME DETECTED: 17.05ms elapsed, 16.68ms sim time, 2 ticks, 28836..28837.
 ```

@@ -3,7 +3,7 @@
 ############################################################
 FROM ubuntu as build_stage
 
-# docker build --file Dockerfile.cs2 --tag cs2_server:0.2.6 .
+# docker build --file Dockerfile.cs2 --tag cs2_server:0.2.7 .
 # docker run -it cs2_server:0.2.6 bash
 # docker run -it  --network host --volume ${HOME}/Downloads/cs2_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts cs2_server:0.2.6 bash
 # su - steam
@@ -70,10 +70,16 @@ RUN apt-get remove --purge --auto-remove -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 FROM build_stage AS ubuntu-root
+
+# Allow the steam user to update the steam app?
+RUN chgrp steam /usr/lib/games && \
+    chmod g+w /usr/lib/games
+
 WORKDIR ${HOMEDIR}
 
 #FROM bullseye-root AS bullseye
 # Switch to user
 USER ${USER}
 
+RUN echo "0.2.7" >> docker_image_version
 RUN export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32 && /usr/games/steamcmd +quit

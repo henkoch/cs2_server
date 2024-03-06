@@ -1,0 +1,20 @@
+version: "3.3"
+include:
+  - ../ansible_playbook/files/docker-compose.yaml
+services:
+  cs2:
+    image: cs2_server:0.2.8
+    container_name: cs2-ds
+    volumes:
+      - type: bind
+        source: ${HOME}/Downloads/cs2_app
+        target: /data/steam/csgo_app
+      - type: bind
+        source: ${PWD}/csgo_scripts
+        target: /data/steam/csgo_git_repo/csgo_scripts
+    network_mode: host
+    restart: unless-stopped
+    command: /data/steam/csgo_git_repo/csgo_scripts/run_cs2_server.sh
+
+
+
