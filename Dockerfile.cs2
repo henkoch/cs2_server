@@ -3,9 +3,9 @@
 ############################################################
 FROM ubuntu as build_stage
 
-# docker build --file Dockerfile.cs2 --tag cs2_server:0.2.7 .
-# docker run -it cs2_server:0.2.6 bash
-# docker run -it  --network host --volume ${HOME}/Downloads/cs2_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts cs2_server:0.2.6 bash
+# docker build --file Dockerfile.cs2 --tag cs2_server:0.2.8 .
+# docker run -it cs2_server:0.2.8 bash
+# docker run -it  --network host --volume ${HOME}/Downloads/cs2_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts cs2_server:0.2.8 bash
 # su - steam
 # ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
 
@@ -81,5 +81,5 @@ WORKDIR ${HOMEDIR}
 # Switch to user
 USER ${USER}
 
-RUN echo "0.2.7" >> docker_image_version
+RUN echo "0.2.8" >> docker_image_version
 RUN export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32 && /usr/games/steamcmd +quit

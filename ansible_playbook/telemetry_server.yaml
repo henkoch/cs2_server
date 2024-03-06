@@ -1,5 +1,5 @@
 ---
-- name: playbook to install the teletry server for the CS2 product
+- name: playbook to install the telemetry server for the CS2 product
   hosts: localhost
   tasks:
   - name: use apt to update its cache
@@ -78,7 +78,7 @@
           src: files/extract_game_stats_from_elk.py
           dest: /usr/local/bin/extract_game_stats_from_elk.py
           mode: '0555'
-      - name: Ensure the game stat extracter is run every minute via cron
+      - name: Ensure the game stat extractor is run every minute via cron
         become: yes
         ansible.builtin.cron:
           name: "update game statistics"

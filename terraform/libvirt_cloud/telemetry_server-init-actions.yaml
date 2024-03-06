@@ -25,7 +25,7 @@ packages:
 
 # 
 runcmd:
-  - cd /home/ansible; git clone -b csgo_conf_dev https://github.com/henkoch/csgo_server
+  - cd /home/ansible; git clone -b main https://github.com/henkoch/csgo_server
   - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "server_name=${vm_hostname}" -v telemetry_server.yaml
   - cp /var/log/cloud-init-output.log /home/ansible
   - date > DONE.txt

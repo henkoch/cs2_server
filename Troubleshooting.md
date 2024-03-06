@@ -771,8 +771,10 @@ Success! App '740' fully installed.
 
 #### Your server needs to be restarted in order to receive the latest update
 
+aka invalid password
+
 * [](https://steamcommunity.com/discussions/forum/13/1696043806570333687/)
-* did a complede delete and then re-install of csgo, and it gave the same error
+* did a complete delete and then re-install of csgo, and it gave the same error
 * [Issue](https://steamcommunity.com/discussions/forum/14/6367585250000001877/)
 
 ```text
@@ -854,7 +856,7 @@ cs2-ds           | /data/steam/csgo_git_repo/csgo_scripts/run_cs2_server.sh: lin
 
 #### Action failed with '[index_not_green_timeout] Timeout waiting for the status of the [.kibana_ingest_8.10.1_001] index to become 'green'
 
-Turns out it was elasticsearch that had the problem (I notices kibana mentionen a porblem connecting to elasticsearch)
+Turns out it was elasticsearch that had the problem (I notices kibana mentionen a problem connecting to elasticsearch)
 
 ```text
 {"@timestamp":"2023-10-18T12:51:57.657Z", "log.level": "WARN", "message":"high disk watermark [90%] exceeded on [GWhTPhtIQOmzC-m6yiOO5Q][1c7d3a882e12][/usr/share/elasticsearch/data] free: 18.6gb[8.2%], shards will be relocated away from this node; currently relocating away shards totalling [0] bytes; the node is expected to continue to exceed the high disk watermark when these relocations are complete", "ecs.version": "1.2.0","service.name":"ES_ECS","event.dataset":"elasticsearch.server","process.thread.name":"elasticsearch[1c7d3a882e12][masterService#updateTask][T#2]","log.logger":"org.elasticsearch.cluster.routing.allocation.DiskThresholdMonitor","elasticsearch.cluster.uuid":"3cy5qpNuRh2QCyfS7ImCPg","elasticsearch.node.id":"GWhTPhtIQOmzC-m6yiOO5Q","elasticsearch.node.name":"1c7d3a882e12","elasticsearch.cluster.name":"docker-cluster"}
@@ -950,10 +952,6 @@ Fix: set the token via `+sv_setsteamaccount TOKEN_ID` to the cs2 command
 
 Set token on [Steam Game Server Account Management](https://steamcommunity.com/dev/managegameservers)
 
-#### How to update the server
-
-version  : 1.39.9.4/13994 9961 insecure  public
-
 #### [----] !!! Fatal Error: Failed to load steamconsole.so
 
 Fix: `export LD_LIBRARY_PATH=/usr/lib/games/linux32`
@@ -973,10 +971,6 @@ doesn't seem like it is required.
 dlmopen steamservice.so failed: steamservice.so: cannot open shared object file: No such file or directory
 Success! App '730' fully installed.
 ```
-
-#### invalid password
-
-Connect 23.523.23.6:27015; password gamefaqs
 
 ### troubleshooting network performance
 
@@ -1035,6 +1029,8 @@ L 03/06/2024 - 10:03:59: "Telsen<3><BOT><TERRORIST>" [1450 -921 -416] killed "PL
 ```
 
 #### Launcher Error: A CPU that supports the SSE4.2 processor feature is required
+
+In the virtmanager, checkmark the 'Copy host CPU configuration (host-passthrough)
 
 ```text
 /data/steam/csgo_git_repo/csgo_scripts/private_run_cs2_server.sh 
