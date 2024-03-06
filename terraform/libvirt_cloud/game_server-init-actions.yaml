@@ -1,4 +1,6 @@
 #cloud-config
+fqdn: ${vm_hostname}
+
 # Add groups to the system
 groups:
   - hashicorp
@@ -37,5 +39,7 @@ mounts:
 # 
 runcmd:
   - cd /home/ansible; git clone -b main https://github.com/henkoch/csgo_server
-  - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "csgo_client_access_password=${csgo_client_access_password}" --extra-vars "csgo_server_rcon_password=${csgo_server_rcon_password}" --extra-vars "one_for_local_zero_for_global=${one_for_local_zero_for_global}" --extra-vars "server_name=${server_name}" --extra-vars "steam_server_token=${steam_server_token}" -v steam_client.yaml
+  - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "csgo_client_access_password=${csgo_client_access_password}" --extra-vars "csgo_server_rcon_password=${csgo_server_rcon_password}" --extra-vars "one_for_local_zero_for_global=${one_for_local_zero_for_global}" --extra-vars "server_name=${vm_hostname}" --extra-vars "steam_server_token=${steam_server_token}" -v steam_client.yaml
+  - cp /var/log/cloud-init-output.log /home/ansible
   - date > DONE.txt
+  - chown -R ansible:ansible /home/ansible

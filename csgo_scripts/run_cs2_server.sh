@@ -1,19 +1,17 @@
 #!/bin/bash
 
-# Script for running the CSGO server.
-
-CSGO_BASE_DIR="/data/steam/csgo_app"
+CSGO_BASE_DIR="/data/steam/csgo_app/game"
 CSGO_SCRIPTS_DIR="/data/steam/csgo_git_repo/csgo_scripts"
 
-export LD_LIBRARY_PATH="${CSGO_BASE_DIR}:${CSGO_BASE_DIR}/bin"
+export LD_LIBRARY_PATH=/data/steam/.local/share/Steam/steamcmd/linux64
 
 # avoid the error:
 #  Failed to open libtier0.so (/data/steam/csgo_app/bin/libgcc_s.so.1: version `GCC_7.0.0' not found (required by /lib/i386-linux-gnu/libstdc++.so.6))
-if [ -f ${CSGO_BASE_DIR}/bin/libgcc_s.so.1 ]
-then
-  echo "III removing ${CSGO_BASE_DIR}/bin/libgcc_s.so.1"
-  mv ${CSGO_BASE_DIR}/bin/libgcc_s.so.1 ${CSGO_BASE_DIR}/bin/libgcc_s.so.1.bck
-fi
+#if [ -f ${CSGO_BASE_DIR}/bin/libgcc_s.so.1 ]
+#then
+#  echo "III removing ${CSGO_BASE_DIR}/bin/libgcc_s.so.1"
+#  mv ${CSGO_BASE_DIR}/bin/libgcc_s.so.1 ${CSGO_BASE_DIR}/bin/libgcc_s.so.1.bck
+#fi
 
 # -condebug Logs all console output into the console.log text file. 
 # -console  Starts the game with the developer console enabled. Same as having con_enable enabled. 
@@ -45,14 +43,14 @@ cp ${CSGO_SCRIPTS_DIR}/gamemodes_server.txt ${CSGO_BASE_DIR}/csgo/
 
 # https://developer.valvesoftware.com/wiki/Counter-Strike:_Global_Offensive/Game_Modes
 #
-CASUAL="-maxplayers 20 -nobots +game_type 0 +game_mode 0 +mapgroup mg_active +map de_nuke"
+CASUAL="-maxplayers 20 +game_type 0 +game_mode 0 +mapgroup mg_active +map de_nuke"
 # https://counterstrike.fandom.com/wiki/Hostage_Rescue
-HOSTAGE_RESCUE="-maxplayers 20 -nobots +game_type 0 +game_mode 0 +sv_game_mode_flags 0 +sv_skirmish_id 0  +mapgroup "casual"  +map cs_office"
+HOSTAGE_RESCUE="-maxplayers 20 +game_type 0 +game_mode 0 +sv_game_mode_flags 0 +sv_skirmish_id 0  +mapgroup "casual"  +map cs_office"
 # The above became arms-race, maybe due to the npbots?
 # HOSTAGE_RESCUE="-maxplayers 20 +game_type 4 +game_mode 0 +map cs_office"
 #  +mapgroup mg_hostage
-ARMS_RACE="-maxplayers 20 -nobots +game_type 0 +game_mode 0 +map cs_office"
-DANGER_ZONE="-maxplayers 12 -nobots  +game_type 6 +game_mode 0 +map dz_blacksite"
+ARMS_RACE="-maxplayers 20 +game_type 0 +game_mode 0 +map cs_office"
+DANGER_ZONE="-maxplayers 12  +game_type 6 +game_mode 0 +map dz_blacksite"
 # https://csspy.com/guides/how-to-start-a-private-danger-zone-server-in-csgo/
 #  alias "pracsirocco" "game_mode 0;game_type 6;map dz_sirocco"
 #  alias "praccounty" "game_mode 0;game_type 6;map dz_county"
@@ -69,4 +67,5 @@ DANGER_ZONE="-maxplayers 12 -nobots  +game_type 6 +game_mode 0 +map dz_blacksite
 #    -net_port_try 1    -maxplayers_override 16  -tickrate 128    +sv_password ServerPassword    +hostname \"CsgoServerName\" -port 27015 +sv_lan 0
 
 # set to casual mode
-${CSGO_BASE_DIR}/srcds_linux -game csgo -usercon -uselogdir -condebug -net_port_try 1 -tickrate 128 ${DANGER_ZONE}
+# TODO add -nobots
+/data/steam/csgo_app/game/bin/linuxsteamrt64/cs2 -dedicated -usercon -uselogdir -condebug -secure  +log on ${CASUAL} +exec cs2_server_settings.cfg

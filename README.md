@@ -19,6 +19,10 @@ Supported environments:
 
 ### References
 
+* [Register game server](https://steamcommunity.com/dev/managegameservers)
+* [](https://www.gamingonlinux.com/2023/09/counter-strike-2-is-out-now-with-linux-support/)
+* [FULL COUNTER STRIKE 2 CONSOLE COMMAND LIST](https://www.ghostcap.com/cs2-commands/)
+
 * [Dedicated Servers List](https://developer.valvesoftware.com/wiki/Dedicated_Servers_List)
 * [How to Make a Counter-Strike: Global Offensive Server on Linux](https://www.hostinger.com/tutorials/how-to-make-a-csgo-server)
 * [forum - Source Dedicated Server (Linux)](https://steamcommunity.com/discussions/forum/14/)
@@ -27,6 +31,7 @@ Supported environments:
 * [Forum - Counter-Strike: Global Offensive](https://steamcommunity.com/app/730/discussions/)
 * [debian csgo docker image](https://hub.docker.com/r/cm2network/csgo/)
 * [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD)
+* [ELK stack for CSGO](https://github.com/CypressXt/elk4csgo)
 
 ### Overview
 
@@ -51,7 +56,17 @@ Steps:
 * login to the VM
 * sudo -i
 * su - steam
-* ~/csgo_git_repo/csgo_scripts/run_server.sh
+* ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
+
+#### Manually installing the csgo server
+
+* ssh in as ansible
+* sudo -
+* su - steam
+* cd ~/csgo_app
+* export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
+* time steamcmd +force_install_dir ~/csgo_app/ +login STEAM_LOGIN STEAM_PASSWORD +app_update 730 validate +quit
+  ~ 145 minutes.
 
 #### Example of deployment script
 
@@ -192,9 +207,13 @@ Please see the `Dockerfile`
 * TODO can I use this command to switch mode? `map <mapname> survival`
   * changelevel dz_blacksite survival
 
+* You can mix rescue and demolition, but not arms race.
+
 ### Parameters of interest
 
 * mp_maxrounds
+  * 5 ?
+  * set the win limit to the same
 * mp_friendlyfire
 * mp_roundtime
 * mp_timelimit
@@ -203,9 +222,14 @@ Please see the `Dockerfile`
 * mp_respawnwavetime
 * mp_roundtime_hostage
 * mp_freezetime
+  * 6
+    * seconds from start of game until you can move, gives older players some help.
+  * 10 seconds feels too long.
+* ?? warmuptime, 60
+  * to give slower load machines a change to get in, until the game actually starts.
 * mp_disable_respawn_times
 * mp_disable_respawn_times
 * mp_friendlyfire
 * mp_limitteams
-mp_teamplay
-mp_autoteambalance
+* mp_teamplay
+* mp_autoteambalance

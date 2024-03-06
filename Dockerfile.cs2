@@ -3,18 +3,19 @@
 ############################################################
 FROM ubuntu as build_stage
 
-# docker build --tag steam_ubuntu:0.1.1 .
-# docker run -it steam_ubuntu:0.1.1 bash
-# docker run -it  --volume ${HOME}/Downloads/csgo_app:/data/steam/csgo_app --volume `pwd`/../csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts steam_ubuntu:0.1.1 bash
-#   --network host
-# cd ~/
-# mkdir ~/csgo_app
+# docker build --file Dockerfile.cs2 --tag cs2_server:0.2.8 .
+# docker run -it cs2_server:0.2.8 bash
+# docker run -it  --network host --volume ${HOME}/Downloads/cs2_app:/data/steam/csgo_app --volume `pwd`/csgo_scripts:/data/steam/csgo_git_repo/csgo_scripts cs2_server:0.2.8 bash
+# su - steam
+# ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
+
+# cd ~/csgo_app
 # export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32
-# time steamcmd +force_install_dir ~/csgo_app/ +login anonymous +app_update 740 validate +quit
-# ~/csgo_git_repo/csgo_scripts/run_server.sh
+# time steamcmd +force_install_dir ~/csgo_app/ +login STEAM_LOGIN STEAM_PASSWORD +app_update 730 validate +quit
+# ~/csgo_git_repo/csgo_scripts/run_cs2_server.sh
 #
-# export LD_LIBRARY_PATH=/data/steam/csgo_app/bin
-# /data/steam/csgo_app/srcds_linux -game csgo -usercon -net_port_try 1 -tickrate 128 -nobots +game_type 0 +game_mode 1 +mapgroup mg_active +map de_mirage
+# export LD_LIBRARY_PATH=/usr/lib/games/linux64
+# /data/steam/csgo_app/game/bin/linuxsteamrt64/cs2 -dedicated +map de_dust2
 
 
 ARG PUID=1000
@@ -40,13 +41,14 @@ RUN dpkg --add-architecture i386 \
  && apt-get install -y --no-install-recommends --no-install-suggests \
       ca-certificates\
       curl\
+      file\
       htop\
+      iproute2\
       less\
-      lib32gcc-s1\
-      lib32stdc++6\
-      libcurl4-gnutls-dev:i386\
+      libxcb1\
       locales\
       steamcmd\
+      strace\
       vim
 
 RUN  sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
@@ -58,14 +60,26 @@ RUN chown ${USER}:${USER} ${HOMEDIR}/.steam
 RUN mkdir ${HOMEDIR}/csgo_git_repo
 RUN chown ${USER}:${USER} ${HOMEDIR}/csgo_git_repo
 
+ADD csgo_scripts/run_cs2_server.sh ${HOMEDIR}/
+RUN chown ${USER}:${USER} ${HOMEDIR}/run_cs2_server.sh
+
+RUN apt update && apt upgrade -y
 
 # Clean up
 RUN apt-get remove --purge --auto-remove -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 FROM build_stage AS ubuntu-root
-WORKDIR ${STEAMCMDDIR}
+
+# Allow the steam user to update the steam app?
+RUN chgrp steam /usr/lib/games && \
+    chmod g+w /usr/lib/games
+
+WORKDIR ${HOMEDIR}
 
 #FROM bullseye-root AS bullseye
-## Switch to user
-#USER ${USER}
+# Switch to user
+USER ${USER}
+
+RUN echo "0.2.8" >> docker_image_version
+RUN export LD_LIBRARY_PATH=/home/steam/steamcmd/linux32 && /usr/games/steamcmd +quit

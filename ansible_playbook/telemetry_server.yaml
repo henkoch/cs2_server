@@ -1,0 +1,85 @@
+---
+- name: playbook to install the telemetry server for the CS2 product
+  hosts: localhost
+  tasks:
+  - name: use apt to update its cache
+    become: yes
+    apt:
+       update_cache: yes
+  - name: install setfacl
+    become: yes
+    apt:
+      update_cache: true
+      package: acl
+  - name: add software-properties-common
+    become: yes
+    apt:
+       package: software-properties-common
+       update_cache: yes
+  - name: install various tools
+    become: yes
+    apt:
+      update_cache: true
+      package: ['curl', 'htop', 'less', 'vim']
+  - name: Install docker-ce as container runtime
+    # https://www.elastic.co/guide/en/beats/filebeat/current/setup-repositories.html
+    block:
+      - name: Add docker-ce keyring
+        become: yes
+        ansible.builtin.apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+      - name: Add docker-ce repo
+        become: yes
+        ansible.builtin.apt_repository:
+          repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+          state: present
+      - name: install docker-ce
+        become: yes
+        apt:
+          update_cache: true
+          package: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+      - name: allow ansible to do docker operations.
+        ansible.builtin.user:
+          name: ansible
+          append: true
+          group: docker
+  - name: Install haproxy
+    block:
+      - name: install haproxy
+        become: yes
+        apt:
+          update_cache: true
+          package: ['haproxy'] 
+      - name: install the haproxy configuration
+        ansible.builtin.copy:
+          src: files/telemetry_haproxy.cfg
+          dest: /etc/haproxy/haproxy.cfg
+          mode: '0644'
+      - name: Restart HAProxy
+        systemd:
+          name: haproxy
+          state: restarted
+  - name: Install game statistics generation
+    block:
+      - name: install various cron and web server
+        become: yes
+        apt:
+          update_cache: true
+          package: ['cron', 'lighttpd', 'python3-elasticsearch']
+      - name: make ansible the owner of /var/www/html
+        become: yes
+        ansible.builtin.file:
+          path: /var/www/html
+          state: directory
+          owner: ansible
+      - name: install the script that extracts the game statistics from the ELK stack
+        ansible.builtin.copy:
+          src: files/extract_game_stats_from_elk.py
+          dest: /usr/local/bin/extract_game_stats_from_elk.py
+          mode: '0555'
+      - name: Ensure the game stat extractor is run every minute via cron
+        become: yes
+        ansible.builtin.cron:
+          name: "update game statistics"
+          job: "/usr/local/bin/extract_game_stats_from_elk.py > /var/www/html/index.html"
