@@ -1033,3 +1033,39 @@ L 03/06/2024 - 10:03:59: "Telsen<3><BOT><TERRORIST>" [1450 -921 -416] killed "PL
 449.297467 UNEXPECTED LONG FRAME DETECTED: 20.46ms elapsed, 20.11ms sim time, 1 ticks, 28835..28835.
 449.314517 UNEXPECTED LONG FRAME DETECTED: 17.05ms elapsed, 16.68ms sim time, 2 ticks, 28836..28837.
 ```
+
+#### Launcher Error: A CPU that supports the SSE4.2 processor feature is required
+
+```text
+/data/steam/csgo_git_repo/csgo_scripts/private_run_cs2_server.sh 
+Launcher Error: A CPU that supports the SSE4.2 processor feature is required.
+```
+
+#### 0 Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/home/ansible/.steam/sdk64/steamclient.so'
+
+Fix switch to the 'steam' user
+
+or change the LD_LIBRARY_PATH in the run_cs2 to /usr/lib/games/linux64
+
+```text
+III Executed cs2_server_settings Config!
+HostStateRequest::Start(HSR_GAME):  loop(levelload) id(2) addons() desc(Loading (de_nuke))
+SwitchToLoop levelload requested:  id [2] addons []
+SV:  Level loading started for 'de_nuke'
+CL:  CLoopModeLevelLoad::MaybeSwitchToGameLoop switching to "game" loopmode with addons ()
+SwitchToLoop game requested:  id [2] addons []
+SteamGameServer_Init()
+dlopen failed trying to load:
+steamclient.so
+with error:
+steamclient.so: cannot open shared object file: No such file or directory
+dlopen failed trying to load:
+/home/ansible/.steam/sdk64/steamclient.so
+with error:
+/home/ansible/.steam/sdk64/steamclient.so: cannot open shared object file: No such file or directory
+[S_API] SteamAPI_Init(): Failed to load module '/home/ansible/.steam/sdk64/steamclient.so'
+Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/home/ansible/.steam/sdk64/steamclient.so'
+ 0 Failed to initialize Steamworks SDK for gameserver.  Failed to load module '/home/ansible/.steam/sdk64/steamclient.so'
+
+./private_run_cs2_server.sh: line 71:  2605 Segmentation fault      (core dumped) /data/steam/csgo_app/game/bin/linuxsteamrt64/cs2 -dedicated -usercon -uselogdir -condebug -secure +log on ${CASUAL} +sv_setsteamaccount STEAM_TOKEN +exec private_cs2_server_settings.cfg
+```
