@@ -9,6 +9,8 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: users, admin
     lock_passwd: false
+    ssh_authorized_keys:
+      - ${ansible_ssh_public_key}
 
 # install packages
 packages:
@@ -33,5 +35,8 @@ runcmd:
   - cd /home/ansible; git clone -b main https://github.com/henkoch/csgo_server
   - sudo dmesg > dmesg.txt
   - sudo mount /data
-  - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "csgo_client_access_password=${csgo_client_access_password}" --extra-vars "csgo_server_rcon_password=${csgo_server_rcon_password}" --extra-vars "one_for_local_zero_for_global=${one_for_local_zero_for_global}" --extra-vars "server_name=${server_name}" --extra-vars "steam_server_token=${steam_server_token}" -v steam_client.yaml
-  - echo "0.3.0" > done.txt
+  - cd csgo_server/ansible_playbook && ansible-playbook --extra-vars "cs2_client_access_password=${cs2_client_access_password}" --extra-vars "cs2_server_rcon_password=${cs2_server_rcon_password}" --extra-vars "one_for_local_zero_for_global=${one_for_local_zero_for_global}" --extra-vars "server_name=${cs_server_name}" --extra-vars "steam_server_token=${steam_server_token}" -v steam_client.yaml
+  - echo "0.3.0" > DONE.txt
+  - cp /var/log/cloud-init-output.log /home/ansible
+  - date >> DONE.txt
+  - chown -R ansible:ansible /home/ansible

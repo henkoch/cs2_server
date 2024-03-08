@@ -50,7 +50,7 @@
     become: yes
     apt:
       update_cache: true
-      package: ['curl', 'htop', 'less', 'vim']
+      package: ['btop', 'curl', 'less', 'prometheus-node-exporter', 'vim']
   - name: Install filebeat
     # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
     block:
@@ -69,7 +69,7 @@
         ansible.builtin.apt_repository:
           repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
           state: present
-      - name: install elasticsearch
+      - name: install filebeat
         become: yes
         apt:
           update_cache: true
