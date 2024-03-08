@@ -19,7 +19,7 @@ packages:
 
 # 
 runcmd:
-  - cd /home/ansible; git clone -b support_azure https://github.com/henkoch/csgo_server
+  - cd /home/ansible; git clone -b main https://github.com/henkoch/csgo_server
   - sudo dmesg > dmesg.txt
   - cd csgo_server/ansible_playbook && ansible-playbook -v telemetry_server.yaml
   - echo "0.3.0" > DONE.txt
