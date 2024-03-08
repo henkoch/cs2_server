@@ -20,7 +20,7 @@
     become: yes
     apt:
       update_cache: true
-      package: ['curl', 'htop', 'less', 'vim']
+      package: ['curl', 'btop', 'less', 'prometheus-node-exporter', 'vim']
   - name: Install docker-ce as container runtime
     # https://www.elastic.co/guide/en/beats/filebeat/current/setup-repositories.html
     block:

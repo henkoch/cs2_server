@@ -1,0 +1,28 @@
+# cloud-init actions
+
+# Add users to the system. Users are added after groups are added.
+users:
+  - default
+  - name: ansible
+    gecos: ansible
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    lock_passwd: false
+    ssh_authorized_keys:
+      - ${ansible_ssh_public_key}
+
+# install packages
+packages:
+  - ansible
+  - git
+
+# 
+runcmd:
+  - cd /home/ansible; git clone -b support_azure https://github.com/henkoch/csgo_server
+  - sudo dmesg > dmesg.txt
+  - cd csgo_server/ansible_playbook && ansible-playbook -v telemetry_server.yaml
+  - echo "0.3.0" > DONE.txt
+  - cp /var/log/cloud-init-output.log /home/ansible
+  - date >> DONE.txt
+  - chown -R ansible:ansible /home/ansible
