@@ -29,3 +29,4 @@
 * copy the filebeat file to etc: sudo cp csgo_server/ansible_playbook/files/filebeat.docker.yml /etc/filebeat/filebeat.yml
 * figure out why the /data dir hasn't been mounted
 * find out what requires the VM to be rebooted
+* wait for the VM IPs to become available
