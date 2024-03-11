@@ -21,7 +21,7 @@ data "template_cloudinit_config" "telementry_commoninit" {
 # Create public IPs
 resource "azurerm_public_ip" "telemetry_public_ip" {
   name                = "telemetry-public-ip"
-  resource_group_name = azurerm_resource_group.cs_rg.name
+  resource_group_name = azurerm_resource_group.counterstrike_rg.name
   location            = var.resource_group_location
   allocation_method   = "Dynamic"
 }
@@ -29,7 +29,7 @@ resource "azurerm_public_ip" "telemetry_public_ip" {
 # Create Network Security Group and rules
 resource "azurerm_network_security_group" "telemetry_nsg" {
   name                = "telemetry-nsg"
-  resource_group_name = azurerm_resource_group.cs_rg.name
+  resource_group_name = azurerm_resource_group.counterstrike_rg.name
   location            = var.resource_group_location
 
   security_rule {
@@ -60,12 +60,12 @@ resource "azurerm_network_security_group" "telemetry_nsg" {
 # Create network interface
 resource "azurerm_network_interface" "telemetry_nic" {
   name                = "telemetryNIC"
-  resource_group_name = azurerm_resource_group.cs_rg.name
+  resource_group_name = azurerm_resource_group.counterstrike_rg.name
   location            = var.resource_group_location
 
   ip_configuration {
     name                          = "telemetry_nic_configuration"
-    subnet_id                     = azurerm_subnet.cs2_subnet.id
+    subnet_id                     = azurerm_subnet.counterstrike_subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.telemetry_public_ip.id
   }
@@ -79,16 +79,20 @@ resource "azurerm_network_interface_security_group_association" "telemetry_nsg_a
 
 
 # Create virtual machine
+#  It seems that the docker image memory requirement is at least 8 GB.
+#  Standard_B2ms has 8 GB memory and 2 vcpus.
+#  Standard_B4ms has 16 GB memory and 4 vcpus.
+#  https://learn.microsoft.com/en-us/azure/virtual-machines/sizes-b-series-burstable
 resource "azurerm_linux_virtual_machine" "telemetry_vm" {
   name                  = "telemetryVM"
-  resource_group_name   = azurerm_resource_group.cs_rg.name
+  resource_group_name   = azurerm_resource_group.counterstrike_rg.name
   location              = var.resource_group_location
   network_interface_ids = [azurerm_network_interface.telemetry_nic.id]
   # https://learn.microsoft.com/en-us/azure/virtual-machines/sizes-general
   #  D2a v4 or D4a v4
   # az vm list-sizes --location "northeurope"
   # az vm list-skus --location northeurope --size Standard_B --all --output table
-  size = "Standard_B1s"
+  size = "Standard_B2ms"
 
   # Provide the the cloud-init data.
   custom_data = data.template_cloudinit_config.telementry_commoninit.rendered

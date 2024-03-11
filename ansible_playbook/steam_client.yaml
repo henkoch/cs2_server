@@ -50,7 +50,7 @@
     become: yes
     apt:
       update_cache: true
-      package: ['btop', 'curl', 'less', 'prometheus-node-exporter', 'vim']
+      package: ['btop', 'cifs-utils', 'curl', 'less', 'prometheus-node-exporter', 'vim']
   - name: Install filebeat
     # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
     block:

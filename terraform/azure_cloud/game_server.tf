@@ -26,7 +26,7 @@ data "template_cloudinit_config" "game_commoninit" {
 # Create public IPs
 resource "azurerm_public_ip" "cs2_public_ip" {
   name                = "cs2-public-ip"
-  resource_group_name = azurerm_resource_group.cs_rg.name
+  resource_group_name = azurerm_resource_group.counterstrike_rg.name
   location            = var.resource_group_location
   allocation_method   = "Dynamic"
 }
@@ -34,7 +34,7 @@ resource "azurerm_public_ip" "cs2_public_ip" {
 # Create Network Security Group and rules
 resource "azurerm_network_security_group" "cs2_nsg" {
   name                = "cs2-nsg"
-  resource_group_name = azurerm_resource_group.cs_rg.name
+  resource_group_name = azurerm_resource_group.counterstrike_rg.name
   location            = var.resource_group_location
 
   security_rule {
@@ -64,12 +64,12 @@ resource "azurerm_network_security_group" "cs2_nsg" {
 # Create network interface
 resource "azurerm_network_interface" "cs2_nic" {
   name                = "cs2NIC"
-  resource_group_name = azurerm_resource_group.cs_rg.name
+  resource_group_name = azurerm_resource_group.counterstrike_rg.name
   location            = var.resource_group_location
 
   ip_configuration {
     name                          = "cs2_nic_configuration"
-    subnet_id                     = azurerm_subnet.cs2_subnet.id
+    subnet_id                     = azurerm_subnet.counterstrike_subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.cs2_public_ip.id
   }
@@ -85,7 +85,7 @@ resource "azurerm_network_interface_security_group_association" "cs2_nsg_associa
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "cs2_vm" {
   name                  = "cs2VM"
-  resource_group_name   = azurerm_resource_group.cs_rg.name
+  resource_group_name   = azurerm_resource_group.counterstrike_rg.name
   location              = var.resource_group_location
   network_interface_ids = [azurerm_network_interface.cs2_nic.id]
   # https://learn.microsoft.com/en-us/azure/virtual-machines/sizes-general
@@ -118,30 +118,6 @@ resource "azurerm_linux_virtual_machine" "cs2_vm" {
     username   = var.username
     public_key = var.admin_public_ssh_key
   }
-
-  # Data disk is linked using azurerm_virtual_machine_data_disk_attachment
-
-}
-
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/managed_disk
-resource "azurerm_managed_disk" "data_disk" {
-  name                 = "cs2_data_disk"
-  resource_group_name  = azurerm_resource_group.cs_rg.name
-  location             = var.resource_group_location
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = "45"
-
-}
-
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_machine_data_disk_attachment
-resource "azurerm_virtual_machine_data_disk_attachment" "data_disk_on_cs2_vm" {
-  count              = 1
-  managed_disk_id    = azurerm_managed_disk.data_disk.id
-  virtual_machine_id = azurerm_linux_virtual_machine.cs2_vm.id
-  # The Logical Unit Number of the Data Disk, which needs to be unique within the Virtual Machine.
-  lun     = "10"
-  caching = "ReadWrite"
 }
 
 
