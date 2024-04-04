@@ -22,7 +22,17 @@
 * cd csgo_XX/ansible_playbook/files
 * TODO configure the prometheus configuration file
 * docker compose up
-* TODO set-up grafana, including downloading the 1860 dashboard
+* set up grafana
+  * point your web browser to graphana at port 3000
+  * add data source
+  * set connection: http://prometheus:9090
+  * click save & test
+  * select dashboards (from the burger menu at the top left)
+  * click new
+  * click import
+  * enter 1860 and click load
+  * select the prometheus in the 'Prometheus' drop down  (just above the import button)
+  * click import
 
 ## TODO
 

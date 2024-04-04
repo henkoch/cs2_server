@@ -9,13 +9,16 @@ resource "azurerm_storage_account" "counterstrike_storage_account" {
   account_replication_type = "LRS"
   allow_nested_items_to_be_public = false
   cross_tenant_replication_enabled  = false
+}
 
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules
+# set the network so that only the subnet can access the storage account
+resource "azurerm_storage_account_network_rules" "counterstrike_storage_network_rules" {
+  storage_account_id = azurerm_storage_account.counterstrike_storage_account.id
 
-  #  network_rules {
-  #  default_action             = "Deny"
-  #  ip_rules                   = ["100.0.0.1"]
-  #  virtual_network_subnet_ids = [azurerm_subnet.counterstrike_subnet.id]
-  #}
+  default_action     = "Deny"
+  virtual_network_subnet_ids = [azurerm_subnet.counterstrike_subnet.id]
+  bypass                     = ["AzureServices"]
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_share

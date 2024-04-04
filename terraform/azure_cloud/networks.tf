@@ -12,4 +12,7 @@ resource "azurerm_subnet" "counterstrike_subnet" {
   resource_group_name  = azurerm_resource_group.counterstrike_rg.name
   virtual_network_name = azurerm_virtual_network.counterstrike_vnet.name
   address_prefixes     = ["10.0.1.0/24"]
+
+  # To allow storage account to access the subnet
+  service_endpoints = ["Microsoft.Storage"]
 }
